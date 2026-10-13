@@ -2,7 +2,7 @@
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-**Release status:** source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm package and marketplace listing are not published yet. The commands below describe the npm package once that release is available.
+Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer uses the commands below. The marketplace listing is not published yet.
 
 ## Codex in VS Code or the terminal
 
