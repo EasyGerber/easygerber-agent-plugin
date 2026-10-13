@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "easygerber",
+  "version": "0.1.0",
+  "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
+  "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
+  "homepage": "https://easygerber.com/agents",
+  "license": "MIT",
+  "keywords": ["easygerber", "easygerber boards"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "EasyGerber",
+        "shortDescription": "Design and export PCB boards",
+        "longDescription": "Use published EasyGerber components to create and revise circuit boards from requirements or firmware pin assignments. Generate board layouts on EasyGerber, inspect results, and export manufacturing files. Requires an EasyGerber account and any required organization permissions; generation and export follow your account's existing limits.",
+        "developerName": "EasyGerber",
+        "category": "Developer Tools",
+        "capabilities": ["PCB design", "Published component search", "Manufacturing exports"],
+        "websiteURL": "https://easygerber.com/agents",
+        "supportURL": "https://easygerber.com/agents",
+        "privacyPolicyURL": "https://easygerber.com/privacy",
+        "termsOfServiceURL": "https://easygerber.com/terms",
+        "logo": "./assets/logo.svg",
+        "composerIcon": "./assets/icon.svg",
+        "defaultPrompt": ["Create a board from the pin assignments in my firmware.", "Find a published component for my EasyGerber board."]
+      }
+    }
+  }
+}

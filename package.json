@@ -1,0 +1,16 @@
+{
+  "name": "@easygerber/agent-plugin",
+  "version": "0.1.0",
+  "description": "EasyGerber skills and remote MCP connection for board design in coding agents.",
+  "type": "module",
+  "license": "MIT",
+  "author": "EasyGerber",
+  "homepage": "https://easygerber.com/agents",
+  "repository": { "type": "git", "url": "git+https://github.com/EasyGerber/easygerber-agent-plugin.git" },
+  "bugs": { "url": "https://github.com/EasyGerber/easygerber-agent-plugin/issues" },
+  "engines": { "node": ">=22" },
+  "bin": { "easygerber": "./bin/easygerber.mjs" },
+  "files": ["bin/easygerber.mjs", "src/cli.mjs", "src/install.mjs", "skills/easygerber/SKILL.md", "skills/easygerber/references/workflow.md", "assets/logo.svg", "assets/icon.svg", "plugin.json", "mcp.json", "README.md", "LICENSE"],
+  "dependencies": { "smol-toml": "1.9.1" },
+  "publishConfig": { "access": "public" }
+}
