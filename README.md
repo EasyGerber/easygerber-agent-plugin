@@ -2,7 +2,7 @@
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-**Release status:** prepared for OpenAI/Codex validation and publication. Marketplace approval, npm namespace ownership, production OAuth, and live-client acceptance must be completed before announcing availability. The commands below describe the published package once that release is available.
+**Release status:** source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm package and marketplace listing are not published yet. The commands below describe the npm package once that release is available.
 
 ## Codex in VS Code or the terminal
 
@@ -51,7 +51,9 @@ See [integration documentation and support](https://easygerber.com/agents), [pri
 
 ## Maintainer validation and release
 
-The package contains the installer runtime, connection metadata, skills, and assets. Maintainer tests and release tooling remain in EasyGerber's private development checkout and are not included in this public export. That tooling creates the OpenAI ZIP and public source from an explicit file allowlist and verifies the resulting archive contents. The exported runtime uses only Node.js built-ins and the public `smol-toml` parser; it never imports EasyGerber's private packages.
+The package contains the installer runtime, connection metadata, skills, and assets. The public repository also contains a GitHub Actions workflow and an installer smoke test. On pushes and pull requests, the workflow checks the packed installer on Linux, Windows, and macOS with Node.js 22 and 24. It tests temporary user profiles without connecting to EasyGerber or using account credentials. These checks cover installation behavior; they do not certify authentication or board operations in a particular agent client. See the [Actions results](https://github.com/EasyGerber/easygerber-agent-plugin/actions) for actual run status.
+
+The workflow and smoke test are excluded from the npm package and plugin ZIP. The broader regression suite and release tooling remain in EasyGerber's private development checkout. That tooling creates the OpenAI ZIP and public source from separate explicit file allowlists and verifies the resulting archive contents. The exported runtime uses only Node.js built-ins and the public `smol-toml` parser; it never imports EasyGerber's private packages.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 
