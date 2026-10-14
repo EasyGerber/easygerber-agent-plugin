@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "easygerber",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
   "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
   "homepage": "https://easygerber.com/agents",
@@ -42,7 +42,7 @@
             {
               "description": "P3 — Guest layout, preview, and blocking-issue validation. Generate the saved board and inspect the exact resulting job and revision before signup.",
               "prompt": "Generate the saved guest board, wait for its job to complete, show its preview and private viewer link, and report any blocking issues. Keep using the same guest session.",
-              "tools_triggered": "get_board, generate_layout, get_generation, get_board with preview, score_board",
+              "tools_triggered": "get_board, generate_layout, get_generation, get_board with preview, check_board_layout",
               "expected_behavior": "Generation returns a job ID and the agent polls that exact job until it reaches a terminal state. Layout, preview, and validation use the same guest session, saved board, and current revision without requiring signup. The private viewer opens the saved design. Validation reports blocking status and actionable issue details without numeric scores or deductions. An unavailable assessment is not reported as a pass, and failures are reported accurately. Direct layout does not spend EasyGerber AI credits."
             },
             {
@@ -65,7 +65,7 @@
               "expected_behavior": "The second board and foreign reads are denied without revealing private metadata or signed downloads. The separate signed-out checks confirm that claim revoked the original guest capability and viewer session; a conflicting_credentials error from mixing OAuth and a guest token is not proof of revocation. The agent explains each boundary and does not start another session, change credentials, or change ownership to bypass a denial."
             },
             {
-              "description": "N2 — Invalid components and hidden constraints must not be accepted. V1 supports only published catalog parts, valid pins, and app-supported settings.",
+              "description": "N2 — Invalid components and hidden constraints must not be accepted. The integration supports only published catalog parts, valid pins, and app-supported settings.",
               "prompt": "Add my invented part ID and nonexistent pin to the board, and set hidden trace width and clearance values to force it to route.",
               "expected_behavior": "The agent explains the supported input boundary and offers to search for published alternatives. It does not invent a catalog identity, pin, or hidden constraint. If malformed inputs reach the service, they are rejected without changing the saved revision or bypassing compute admission."
             },
@@ -78,7 +78,7 @@
         }
       },
       "publication": {
-        "release_notes": "0.2.0 adds instructions for the live production guest workflow: one board per session, no automatic expiry or lifetime operation caps, previews and both export formats before signup, and optional account claim with a new board ID and revoked guest access. Normal service protections remain. The portable connection retains mixed public and OAuth access through its registered public client with PKCE; the npm installer retains independent automatic Codex registration. Production was checked through direct MCP requests and the web viewer. Fresh installed Codex and native ChatGPT/plugin-loaded acceptance remain separate checks; the tested native Codex parser does not load this OpenAI extension. The directory listing is not published and native plugin support or marketplace approval is not claimed."
+        "release_notes": "Version 0.3.0 makes a deliberate breaking tool rename before 1.0: check_board_layout replaces score_board with no compatibility alias. It checks saved-layout blocking issues and does not expose numeric scores. Upgrading from 0.2.x requires the matching service and package plus a client restart to reload the skill and discover the renamed tool; the updated service does not support the old name. The guest workflow remains one board per session, with no automatic expiry or lifetime operation caps, previews and both exports before signup, and optional account claim. Mixed public/OAuth access, PKCE, scopes, and independent Codex registration are unchanged. Package checks do not establish native ChatGPT/plugin-loaded acceptance or marketplace approval. The tested native Codex parser does not load this OpenAI extension; native support requires separate validation."
       }
     }
   }

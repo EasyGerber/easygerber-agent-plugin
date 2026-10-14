@@ -9,7 +9,7 @@ The server tool schema is authoritative for field names, allowed settings, requi
 | Published component selection | `search_parts`, `get_part` |
 | Saved boards and schematic revisions | `list_boards`, `get_board`, `create_board`, `update_board` |
 | Layout jobs | `generate_layout`, `get_generation`, `stop_generation` |
-| Assessment and manufacturing artifacts | `score_board`, `export_board` |
+| Layout blocker checks and manufacturing artifacts | `check_board_layout`, `export_board` |
 
 ## Guest trial and account claim
 
@@ -54,7 +54,7 @@ After `generate_layout`, use `get_generation` with the returned ID and follow an
 
 ## Check and export
 
-Use `score_board` to check the saved layout. Its `validation` reports `hasBlockingIssues` and actionable `blockingIssues`; report those issues or say that no blocking issues were found. Numeric scores and deductions are not exposed. A null `validation` on a board read means it has no current assessment, not that it passed; generate a fresh layout if needed and run the check. Use `export_board` for the manufacturing files the user asks for. Link returned artifacts or download them to a user-requested local destination using the host's tools. Export links may expire; request a fresh export if needed. Do not infer that exporting orders a physical board.
+Use `check_board_layout` to check the saved layout. Its `validation` reports `hasBlockingIssues` and actionable `blockingIssues`; report those issues or say that no blocking issues were found. Numeric scores and deductions are not exposed. A null `validation` on a board read means it has no current assessment, not that it passed; generate a fresh layout if needed and run the check. Use `export_board` for the manufacturing files the user asks for. Link returned artifacts or download them to a user-requested local destination using the host's tools. Export links may expire; request a fresh export if needed. Do not infer that exporting orders a physical board.
 
 ## Permission and limits
 
