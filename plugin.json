@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "easygerber",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
   "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
   "homepage": "https://easygerber.com/agents",
@@ -12,7 +12,7 @@
       "interface": {
         "displayName": "EasyGerber",
         "shortDescription": "Design and export PCB boards",
-        "longDescription": "Use published EasyGerber components to create and revise circuit boards from requirements or firmware pin assignments. Try one board per guest session without an account, including layouts, previews, blocker checks, and manufacturing ZIP or EasyGerber exports before signup. Guest boards have no automatic expiry or lifetime operation caps; normal request-rate, complexity, and shared compute protections apply. Sign in when you want to keep the board in your personal account or work with saved account boards and organizations. Account operations follow your permissions and existing plan limits.",
+        "longDescription": "Use published EasyGerber components to create and revise circuit boards from requirements or firmware pin assignments. Try one board per guest session without an account, including layouts, previews, blocker checks, and manufacturing ZIP or EasyGerber exports before signup. Guest boards have no automatic expiry or lifetime operation caps; normal request-rate, complexity, and shared compute protections apply. Use a connected account automatically, or start a guest board when no account is connected. Signing in saves that task’s guest board to the personal account without another save confirmation. Account operations follow your permissions and existing plan limits.",
         "developerName": "EasyGerber",
         "category": "Developer Tools",
         "capabilities": ["PCB design", "Published component search", "Manufacturing exports"],
@@ -22,7 +22,7 @@
         "termsOfServiceURL": "https://easygerber.com/terms",
         "logo": "./assets/logo.svg",
         "composerIcon": "./assets/icon.svg",
-        "defaultPrompt": ["Create a guest board without signing in, then show its preview and export both file formats.", "Create a board from the pin assignments in my firmware.", "Find a published component for my EasyGerber board."]
+        "defaultPrompt": ["Create a small 3.3 V LED board, show a preview, and export the manufacturing files and EasyGerber file.", "Create a board from the pin assignments in my firmware.", "Find a published component for my EasyGerber board."]
       },
       "review": {
         "test_cases": {
@@ -52,10 +52,10 @@
               "expected_behavior": "Exports use the authoritative saved revision and a fresh layout in the original guest session. Both private downloads open without signup, retain applicable license notices and change notes, and have their fifteen-minute link expiration explained separately from the guest board's lack of automatic expiry. No numeric PCB score is exposed. No purchasing, public sharing, or deletion occurs."
             },
             {
-              "description": "P5 — Optional account authorization and guest claim. Keep the completed guest board in the reviewer's personal account, then inspect permitted account access.",
-              "prompt": "Help me sign in through the normal EasyGerber account flow and keep this guest board in my personal account. Verify its new board ID and saved design, then list my accessible organizations without moving the board.",
-              "tools_triggered": "get_profile, claim_guest_board, get_board, list_organizations",
-              "expected_behavior": "The agent completes any active guest job before switching to normal account OAuth. Claim uses authorized boards:write access and the original guest token, copies the full saved design into personal ownership, and returns a new board ID. Subsequent board calls use account access and the new ID without mixing credentials. The old guest token and viewer session no longer grant access. Only organizations accessible to the signed-in account are returned. Claim does not move the board to an organization or erase earlier guest activity."
+              "description": "P5 — Optional account authorization automatically saves the guest board. Connect the reviewer’s account without an extra save request, then inspect permitted account access.",
+              "prompt": "Connect my EasyGerber account so I can continue working, then list my accessible organizations without moving this board to an organization.",
+              "tools_triggered": "claim_guest_board with the original guestToken, retry claim_guest_board after account authorization, get_board, get_profile, list_organizations",
+              "expected_behavior": "The agent uses claim_guest_board with the original guest token to initiate normal account OAuth, then retries the same claim automatically after consent without asking for a separate save confirmation or substituting get_profile. It finishes any active guest job before switching to OAuth; guest_board_busy requires waiting and automatically retrying without cancellation or account downgrade. Failed or interrupted claims retain the original token for safe retry. Authorized boards:write access transfers the full saved design into personal ownership and returns a new board ID. The agent reads that account board and its current revision before further writes, omitting guest tokens from ordinary account calls. The old guest token and viewer session no longer grant access. Only accessible organizations are returned; the board is not moved to an organization and earlier guest activity is retained."
             }
           ],
           "negative": [
@@ -78,7 +78,7 @@
         }
       },
       "publication": {
-        "release_notes": "Version 0.3.0 makes a deliberate breaking tool rename before 1.0: check_board_layout replaces score_board with no compatibility alias. It checks saved-layout blocking issues and does not expose numeric scores. Upgrading from 0.2.x requires the matching service and package plus a client restart to reload the skill and discover the renamed tool; the updated service does not support the old name. The guest workflow remains one board per session, with no automatic expiry or lifetime operation caps, previews and both exports before signup, and optional account claim. Mixed public/OAuth access, PKCE, scopes, and independent Codex registration are unchanged. Package checks do not establish native ChatGPT/plugin-loaded acceptance or marketplace approval. The tested native Codex parser does not load this OpenAI extension; native support requires separate validation."
+        "release_notes": "Version 0.3.2 updates instructions for automatic guest-board saving. New board requests use the connected account or start one guest board without requiring an account-mode choice. After account authorization, the agent completes the existing claim with the original guest token and continues with the returned account board; no separate save confirmation is needed. The private viewer saves after its sign-in handoff, while merely viewing a guest board in an already signed-in browser leaves guest ownership unchanged. Tool names, endpoints, OAuth clients, scopes, installer behavior, and guest limits are unchanged from the 0.3.0 contract. Upgrading reloads the skill in a new client session. Separate directory and native artifacts preserve their supported connection formats; package checks do not establish client workflow acceptance or directory approval."
       }
     }
   }
