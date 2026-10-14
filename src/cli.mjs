@@ -11,7 +11,9 @@ Installs a standalone skill and remote MCP connection for the current user.
 Works with Codex CLI and IDE; no firmware or project files are changed.
 --dry-run lists changes without writing files. --yes permits unattended use.
 Codex is the default and only installer target in this release. Node.js 22+ is required.
-Account authorization is completed separately in Codex's MCP sign-in flow.
+Ask your agent to try one guest board when the service offers guest sessions.
+Guest boards have no automatic expiry or lifetime edit/layout/export caps; service protections apply.
+Account authorization is optional for the guest trial and completed in Codex's MCP sign-in flow.
 `
 
 export async function runCli(args, options = {}) {
@@ -38,7 +40,8 @@ export async function runCli(args, options = {}) {
     if (command === 'doctor') {
       const result = await doctor(context)
       output(result.ok ? 'EasyGerber skill and MCP configuration are installed.' : result.issues.join('\n'))
-      output('Authentication is not checked. Open Codex MCP settings to connect, or run: codex mcp login easygerber')
+      output('Live service access is not checked. Guest support depends on the server and client; ask your agent to check the available EasyGerber tools.')
+      output('For account boards, sign in through Codex MCP settings, or run: codex mcp login easygerber')
       output('If EasyGerber is also installed as a native plugin, keep one installation to avoid duplicate tools.')
       return result.ok ? 0 : 1
     }
@@ -47,7 +50,8 @@ export async function runCli(args, options = {}) {
     for (const target of result.changed) output(`  ${target}`)
     for (const target of result.preserved) output(`Preserved modified file: ${target}`)
     if (command === 'setup' && !dryRun) {
-      output('Restart the Codex chat/IDE to load the skill. Connect EasyGerber in MCP settings, or run: codex mcp login easygerber')
+      output('Restart the Codex chat/IDE to load the skill, then ask EasyGerber to create, preview, and export a guest board without signing in.')
+      output('Guest trials require server/client support. For account boards, use Codex MCP settings or run: codex mcp login easygerber')
       output('Do not install the native plugin alongside this standalone skill and connection.')
     }
     if (command === 'uninstall' && !dryRun) output('Local files were removed where unchanged. Disconnect/revoke EasyGerber authorization separately in Codex or your EasyGerber account.')

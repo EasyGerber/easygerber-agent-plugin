@@ -7,8 +7,8 @@
       "extensions": {
         "com.openai": {
           "auth": {
-            "type": "oauth",
-            "client": { "mode": "cimd" },
+            "type": "mixed",
+            "client": {"mode": "provided", "clientId": "AjOfIMjRZXJjsTJlNseULYxpjBIjphtQ", "tokenEndpointAuthMethod": "none"},
             "baseScopes": ["boards:read", "boards:write", "boards:generate", "boards:export", "offline_access"]
           }
         }

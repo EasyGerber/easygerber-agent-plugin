@@ -4,15 +4,28 @@ The server tool schema is authoritative for field names, allowed settings, requi
 
 | Purpose | Tools |
 | --- | --- |
+| Guest board access and account claim | `start_guest_session`, `claim_guest_board` |
 | Personal account and organizations | `get_profile`, `list_organizations` |
 | Published component selection | `search_parts`, `get_part` |
 | Saved boards and schematic revisions | `list_boards`, `get_board`, `create_board`, `update_board` |
 | Layout jobs | `generate_layout`, `get_generation`, `stop_generation` |
 | Assessment and manufacturing artifacts | `score_board`, `export_board` |
 
+## Guest trial and account claim
+
+When `start_guest_session` is available and the user wants a new board without signing in, call it using the current schema. It returns `guestToken`, `expiresAt`, `limits`, and `viewerUrl`. Retain these for this task. `expiresAt: null` means no scheduled expiration, and `limits: { boards: 1 }` allows one guest board with no lifetime caps on edits, layouts, checks, previews, or exports. Starting a session is not an idempotent recovery operation: each successful call creates a new session and cannot recover a lost one. Reuse the existing session and board-operation request IDs after ambiguous failures; do not start another session to bypass the board limit, a denial, or service protections. The board limit is per session, not a promise of one verified trial per person. Guest support in a server schema does not prove support in every client.
+
+Pass `guestToken` in supported tool arguments. It authorizes this guest session's catalog access and board workflow, not private account boards or organizations. Do not send an organization ID for guest work. Guest mode supports saving one board, app-supported edits, layout, blocker checks, preview, and both manufacturing ZIP and EasyGerber exports before signup. The server's returned limits and nullable expiry are authoritative. Normal request-rate, complexity, and shared compute protections still apply; follow any retry guidance without changing identities or requiring signup to continue editing the same guest board. `guest_session_required` means a new trial can start if that matches the user's request. `guest_session_unavailable` can mean invalid, revoked, claimed, or an expired finite legacy session; it is not permission to replace the session automatically. Do not invent a deadline or renewal for a null expiry.
+
+Treat the guest token as a private capability. Do not print it, put it in a repository, add it to a commit, or record it in analytics or diagnostic logs. Keep it in the tool context, and give the user only the private viewer link returned by the service when they need to inspect or return to their board. Anyone with that link can access the guest board, and losing the capability/link prevents guest recovery. Do not shorten the link through an external service or make it public. Download links are private and expire separately after fifteen minutes; export objects become eligible for cleanup after twenty-four hours. Neither artifact timer expires the guest board.
+
+Account tools may return `authentication_required`. Use the client's normal OAuth flow for account work. If an expired or invalid account credential is rejected, reconnect the account; do not silently downgrade it to guest access. When an account is authorized, omit guest tokens from ordinary board calls; mixing credentials is rejected as `conflicting_credentials`. To add account ownership and account-based recovery, open the private viewer link, sign in, and choose **Keep board**, or call `claim_guest_board` with authorized `boards:write` account access and the original `guestToken`. Claiming copies the saved design into personal account ownership and returns a new board ID; retain that ID and fetch its current state before continuing. Successful claim revokes the old guest token and viewer session; use the account board link from then on. Do not assume the guest ID remains the account board's ID. The account supports additional boards under normal plan limits; signup is not required merely to prevent the guest board from expiring. If guest access is unavailable, explain the result without promising restoration; locally downloaded exports are separate files the user can keep.
+
+Finish polling an active guest layout before switching the MCP connection to OAuth. A claim made while the guest job is active returns `guest_board_busy`; if already signed in, retain the capability and retry the claim after allowing the job to finish. The private viewer can refresh the saved board but does not report job progress. Do not disconnect the account or mix credentials to regain guest polling.
+
 ## Create from firmware or requirements
 
-1. Identify the board requirements and whether the user requested an organization owner; otherwise use personal ownership. Read only relevant firmware files to map hardware pin names to signals. Distinguish firmware-defined choices from missing electrical requirements.
+1. Identify the board requirements and use the existing guest session or authorized account ownership. For account work, use an organization only when requested; otherwise use personal ownership. Read only relevant firmware files to map hardware pin names to signals. Distinguish firmware-defined choices from missing electrical requirements.
 2. Search the published catalog and use `get_part` to confirm part identity, available pin data, electrical compatibility, essential supporting circuitry, and the requested connector form factor. Firmware pin labels describe signals; map them through real catalog pins. When no suitable published part exists, explain the missing capability and ask about an acceptable published alternative.
 3. Submit the thin schematic using the live `create_board` schema: catalog part references, instance identities, connections, and visible settings. Include a fresh UUID `requestId` for the operation; retain it for any retry of the same unchanged request. The server resolves component geometry, models, and routing constraints. This also applies to test coupons.
 4. Retain the saved board ID and revision. If layout generation is requested, call `generate_layout` and retain its job ID. Report a saved schematic separately from a completed layout.
@@ -37,7 +50,7 @@ const intent = {
 
 Read `get_board` before `update_board`. Preserve component/catalog identities and fields outside the requested change. Pass the returned board revision as `expectedRevision` and a UUID `requestId` for a new update or generation operation. Reuse that request ID only when retrying the identical operation. If the tool rejects a revision, retrieve the current board and reconcile before submitting a new request. On validation errors, correct the reported input rather than weakening hidden constraints.
 
-After `generate_layout`, use `get_generation` with the returned ID and follow any suggested polling interval. Stop polling when completed, failed, or stopped; do not loop rapidly. `stop_generation` is for a user-requested stop or an explicitly superseded job. A timeout does not establish failure: inspect the known job before resubmitting.
+After `generate_layout`, use `get_generation` with the returned ID and follow any suggested polling interval. Stop polling when completed, failed, or cancelled; do not loop rapidly. `stop_generation` is for a user-requested stop or an explicitly superseded job. A timeout does not establish failure: inspect the known job before resubmitting.
 
 ## Check and export
 
@@ -45,4 +58,4 @@ Use `score_board` to check the saved layout. Its `validation` reports `hasBlocki
 
 ## Permission and limits
 
-The scopes are `boards:read`, `boards:write`, `boards:generate`, and `boards:export`. Authorization does not bypass organization membership, the existing plan, quotas, or compute limits. If a tool returns an authorization, quota, or unsupported-setting error, explain the concrete restriction and next step. Do not change ownership or credentials to work around it. Keep private board content and signed download URLs within the user's task.
+For account access, the scopes are `boards:read`, `boards:write`, `boards:generate`, and `boards:export`. Authorization does not bypass organization membership, the existing plan, quotas, or compute limits. Guest access permits one board with no lifetime operation caps; request-rate, complexity, and shared compute protections remain. If a tool returns an authorization, rate, admission, or unsupported-setting error, explain the concrete restriction and next step. Do not change ownership or credentials to work around it. Keep private board content, guest viewer links, and signed download URLs within the user's task.

@@ -179,7 +179,7 @@ try {
   assert.match(await cli(lifecycle, ['setup', '--yes']), /Changed 4 file\(s\)/)
   const installed = await tree(lifecycle.root)
   assert.match(await cli(lifecycle, ['setup', '--client', 'codex', '--yes']), /Changed 0 file\(s\)/)
-  assert.match(await cli(lifecycle, ['doctor']), /Authentication is not checked/)
+  assert.match(await cli(lifecycle, ['doctor']), /Live service access is not checked/)
   assert.deepEqual(await tree(lifecycle.root), installed, 'repeated setup and doctor must not write')
   await preserved(lifecycle)
 
