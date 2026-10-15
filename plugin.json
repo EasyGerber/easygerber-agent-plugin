@@ -6,16 +6,16 @@
   "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
   "homepage": "https://easygerber.com/agents",
   "license": "MIT",
-  "keywords": ["easygerber", "easygerber boards"],
+  "keywords": ["easygerber", "ai pcb design", "pcb design", "circuit board design", "printed circuit board design", "circuit design", "schematic design", "pcb layout", "automatic pcb routing", "electronic component search", "3d pcb preview", "gerber export", "pcb manufacturing files", "bill of materials"],
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "EasyGerber",
-        "shortDescription": "Design and export PCB boards",
-        "longDescription": "Use published EasyGerber components to create and revise circuit boards from requirements or firmware pin assignments. Try one board per guest session without an account, including layouts, previews, blocker checks, and manufacturing ZIP or EasyGerber exports before signup. Guest boards have no automatic expiry or lifetime operation caps; normal request-rate, complexity, and shared compute protections apply. Use a connected account automatically, or start a guest board when no account is connected. Signing in saves that task’s guest board to the personal account without another save confirmation. Account operations follow your permissions and existing plan limits.",
+        "shortDescription": "AI PCB design and layout",
+        "longDescription": "Design circuit boards with AI, from your first idea to the files your manufacturer needs. Describe what you want to build in everyday language, or start with the pin assignments in your firmware.\n\nChoose from over one million electronic components in EasyGerber’s catalog, including LEDs, sensors, connectors, and microcontrollers. Build with real catalog parts, their footprints, and available 3D models—from a simple LED circuit to a custom electronics project.\n\nCreate and edit schematics, generate PCB layouts with automatic component placement and routing, and refine your design through conversation. Adjust board settings, explore copper layers, inspect your board in interactive 3D, and check for blocking layout issues before exporting.\n\nDownload Gerber files, drill files, a bill of materials (BOM), component placement files, and an editable EasyGerber file to continue working on your design.\n\nStart with one guest board without signing up. When you connect your account, your guest design is saved automatically.",
         "developerName": "EasyGerber",
         "category": "Developer Tools",
-        "capabilities": ["PCB design", "Published component search", "Manufacturing exports"],
+        "capabilities": ["AI circuit and PCB design", "Schematic design and editing", "Automatic PCB layout and routing", "Electronic component search", "3D PCB previews", "PCB layout checks", "Gerber and manufacturing exports", "Bill of materials (BOM) export"],
         "websiteURL": "https://easygerber.com/agents",
         "supportURL": "https://easygerber.com/agents",
         "privacyPolicyURL": "https://easygerber.com/privacy",

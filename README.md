@@ -4,7 +4,7 @@ This package connects coding agents to EasyGerber's hosted board-design tools. I
 
 Version 0.3.2 updates the agent instructions for automatic saving after sign-in. Use a connected EasyGerber account, or start a guest board automatically when none is connected. Signing in continues into saving that task’s guest board to the personal account, without another save confirmation. The tool contract and installer behavior are unchanged from 0.3.0.
 
-Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and portable directory package have separate release and client-validation processes.
+Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
 
 ## Codex in VS Code or the terminal
 
@@ -44,7 +44,16 @@ A successful claim returns a new account board ID and ends guest access. The age
 
 The portable root manifest and `mcp.json` support review for OpenAI's plugin directory. They declare mixed public and OAuth access: guests can discover tools without account authorization, and account operations use a registered public OAuth client with PKCE and normal consent. Its client ID is public metadata, not a credential. This does not alter the npm installer's automatic Codex registration. Guest discovery and optional account authorization need separate checks in each client; package validation does not establish directory approval or native-client acceptance. The native Codex package uses a separate compatible manifest and MCP file with automatic OAuth discovery; it does not copy the directory-only client ID. Use that native package in a supported desktop client, or the standalone installation above for Codex in the terminal and IDE. The portable directory ZIP is not interchangeable with the native ZIP. Avoid installing duplicate integrations in the same client.
 
-Only OpenAI/Codex is targeted for the initial release. The npm installer, portable directory ZIP, and native plugin ZIP share the same workflow instructions.
+## Claude
+
+The Claude package is prepared in the `claude` folder of the public repository, with `.claude-plugin/plugin.json` and `.mcp.json`. It shares the EasyGerber skill, artwork, and hosted service with the OpenAI packages. The npm installer remains Codex-only. For local validation and loading with Claude Code 2.1.281 or newer, from a checkout of the public repository:
+
+```sh
+claude plugin validate ./claude --strict
+claude --plugin-dir ./claude
+```
+
+Use `/mcp` in Claude Code to inspect the EasyGerber connection and authorize account access when needed. In Claude chat and Cowork, add or connect EasyGerber from the plugin’s Connectors tab. These packages require their own client and directory validation; preparing the Claude package does not mean it is listed or approved.
 
 ## Update and remove
 
@@ -71,7 +80,7 @@ The package contains the installer runtime, connection metadata, skills, and ass
 
 The production service supports guest creation, layout, previews, blocker checks, both exports, and account saving. Validate those operations and the sign-in continuation with the exact package and client being released; earlier service or package checks do not establish acceptance of a new client artifact.
 
-The workflow and smoke test are excluded from the npm package and plugin ZIP. The broader regression suite and release tooling remain in EasyGerber's private development checkout. That tooling creates the OpenAI ZIP and public source from separate explicit file allowlists and verifies the resulting archive contents. The exported runtime uses only Node.js built-ins and the public `smol-toml` parser; it never imports EasyGerber's private packages.
+The workflow and smoke test are excluded from the npm package and plugin ZIPs. The broader regression suite and release tooling remain in EasyGerber's private development checkout. That tooling creates the OpenAI ZIP, Claude ZIP, and public source from explicit file allowlists and verifies the resulting archive contents. The public source includes a generated `claude` folder: submit that plugin path in the existing repository. Claude requires the separate folder because the root npm installer has a `bin/` directory that Claude chat and Cowork cannot install. Shared skills and artwork are copied from their canonical sources during release; maintainers do not edit a second copy. The exported installer runtime uses only Node.js built-ins and the public `smol-toml` parser; it never imports EasyGerber's private packages. The Claude package contains only documentation, artwork, and remote connection metadata.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 

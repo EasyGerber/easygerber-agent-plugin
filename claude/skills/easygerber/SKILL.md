@@ -1,0 +1,24 @@
+---
+name: easygerber
+description: Create, inspect, revise, and export EasyGerber circuit boards using its remote MCP tools, including boards based on firmware pin assignments. Use when the user wants EasyGerber board work; ordinary firmware-only edits do not require this skill.
+---
+
+# EasyGerber board design
+
+Use the installed EasyGerber MCP tools for the requested board workflow. Hosts may prefix tool names differently; discover the tools available on the EasyGerber connection and follow their current schemas. If the connection is missing, direct the user to https://easygerber.com/agents. Never ask for tokens in chat or read credentials from project files.
+
+This skill expects `check_board_layout` for saved-layout blocker checks. If the connection does not advertise it, report that the service and integration versions do not match; do not substitute another tool or treat an unavailable check as a pass.
+
+EasyGerber's production service supports one guest board per session without an account. For a new board, use an already authorized account; otherwise discover `start_guest_session` and start a guest board automatically, allowing the requested previews and both manufacturing ZIP and `.egb` exports before signup. Users do not need to choose an account mode or mention guests. One guest board has no lifetime operation caps or automatic expiry when `expiresAt` is null; normal request-rate, complexity, and shared compute protections apply. Reuse a session already returned in this task. Keep its capability token in tool arguments only, never in project files, logs, or ordinary messages; the private viewer link returned by the service is the only user-facing exception and is needed to return to the board. Read the guest section of [the workflow reference](references/workflow.md) before starting or claiming a guest board. Existing account boards and organization work require the host's sign-in flow; an expired account connection is not permission to recreate private work as a guest.
+
+When the user chooses sign-in or account work with a guest board in this task, automatically save that board to their personal account. Use `claim_guest_board` with its original `guestToken` to initiate account authorization, then retry that same claim immediately when authentication resumes. Do not ask a separate “Keep board?” question or use `get_profile` as a substitute for the pending claim. Follow the workflow reference for busy retries and the returned account board ID. Generic native Settings **Authenticate** has no guest-board context; after that flow, the agent must resume the claim to complete the save.
+
+Read relevant firmware locally to extract pin assignments, signal names, power requirements, and connector needs. Send the minimum board requirements and schematic data needed for the request; do not upload the whole repository or unrelated files. Clarify electrical choices that cannot be inferred, such as an ambiguous power supply or conflicting pin assignments.
+
+For an authorized account, complete any pending guest claim first, then use `get_profile` to identify personal ownership and `list_organizations` when the user requests organization board work. New account boards belong to the personal account by default; pass `organizationId` only for the organization the user requested. Existing board operations use the board's saved ownership. Authorization remains limited by the user's permissions in that organization.
+
+Read [the workflow reference](references/workflow.md) for board creation, revision, generation, validation, and export. Search and inspect published catalog parts before connecting them. Preserve catalog IDs, pin identities, footprints, and available 3D models. Never invent component records or replace published footprints. Author the thin schematic and app-visible settings; the server hydrates catalog data and hidden routing/manufacturing constraints.
+
+Inspect an existing board before editing it. Apply only the requested changes and use the revision/concurrency fields required by the live tool schema. On a conflict, reload the board and reconcile the user's change; do not overwrite a newer revision blindly. Board generation is asynchronous: retain its returned generation ID, inspect its status, and report results or actionable failures. Reuse an existing returned operation when a request outcome is uncertain instead of starting duplicate work.
+
+Keep actions within the user's requested scope. Creating or revising a board does not authorize making it public or purchasing fabrication. Explain returned electrical or manufacturing issues accurately; successful generation or no blocking issues is not a safety certification. Return the board link and requested artifacts, and distinguish saved, generated, and exported states.
