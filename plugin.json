@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "easygerber",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
   "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
   "homepage": "https://easygerber.com/agents",
@@ -78,7 +78,7 @@
         }
       },
       "publication": {
-        "release_notes": "Version 0.3.2 updates instructions for automatic guest-board saving. New board requests use the connected account or start one guest board without requiring an account-mode choice. After account authorization, the agent completes the existing claim with the original guest token and continues with the returned account board; no separate save confirmation is needed. The private viewer saves after its sign-in handoff, while merely viewing a guest board in an already signed-in browser leaves guest ownership unchanged. Tool names, endpoints, OAuth clients, scopes, installer behavior, and guest limits are unchanged from the 0.3.0 contract. Upgrading reloads the skill in a new client session. Separate directory and native artifacts preserve their supported connection formats; package checks do not establish client workflow acceptance or directory approval."
+        "release_notes": "Version 0.3.3 clarifies how a new board starts when account status is unknown: call start_guest_session directly instead of probing account-only tools. A successful start supplies the guest session; account_connected continues with the already authorized account without creating a guest. Existing guest sessions and pending claims are reused, real authorization failures retain the normal account flow, and an ambiguous session start is not repeated automatically. Automatic saving after sign-in remains unchanged. This is a shared instruction update; tool contracts, endpoints, OAuth clients, scopes, installer runtime, and guest limits are unchanged. Reload the skill in a new client session. Package checks do not establish client workflow acceptance or directory approval."
       }
     }
   }

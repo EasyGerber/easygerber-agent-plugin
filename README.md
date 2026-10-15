@@ -2,13 +2,13 @@
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-Version 0.3.2 updates the agent instructions for automatic saving after sign-in. Use a connected EasyGerber account, or start a guest board automatically when none is connected. Signing in continues into saving that task’s guest board to the personal account, without another save confirmation. The tool contract and installer behavior are unchanged from 0.3.0.
+Version 0.3.3 clarifies how a new board starts when account status is unknown, so account-only connection checks do not prompt for sign-in before the guest workflow can begin. Existing guest sessions and authorized accounts are reused. Signing in still saves that task’s guest board to the personal account without another save confirmation. The tool contract and installer runtime are unchanged.
 
 Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
 
 ## Codex in VS Code or the terminal
 
-Requires Node.js 22 or newer and Codex. To install version 0.3.2:
+Requires Node.js 22 or newer and Codex. The published npm installer remains version 0.3.2; the 0.3.3 instruction package has not been published to npm. To install the published version:
 
 ```sh
 npx @easygerber/agent-plugin@0.3.2 setup --dry-run

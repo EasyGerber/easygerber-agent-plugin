@@ -1,7 +1,7 @@
 {
   "name": "easygerber",
   "displayName": "EasyGerber",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
   "author": {
     "name": "EasyGerber",
