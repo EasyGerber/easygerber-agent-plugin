@@ -20,6 +20,18 @@ This account entry requires authorization during connection setup and uses the e
 
 On October 16, 2026, consumer Grok completed consent, read an existing private saved board, saved a temporary name change, and restored the original name. Both changes were confirmed after reopening the board on the EasyGerber website. Grok Bot has not been tested. Browser 3D rendering was not verified because WebGL was unavailable in the test browser. This consumer check does not establish Grok Build's interactive OAuth or model-driven board workflow.
 
+## Cursor
+
+The public repository includes a native `.cursor-plugin/plugin.json` manifest. It uses the shared EasyGerber skill and artwork and connects to `https://www.easygerber.com/api/mcp/account`. This entry requires account authorization before tools become available; complete EasyGerber sign-in and choose **Allow access** in Cursor's connection flow. Account permissions, plan limits, and generation billing still apply.
+
+To load a checkout of the public repository in the official Cursor CLI:
+
+```sh
+agent --plugin-dir .
+```
+
+Enter `/mcp`, select **Easygerber (plugin)**, and choose **Manage Server → Login** to complete the browser consent flow. Then ask: “Open this saved EasyGerber board: [your board URL]. Read its current name and components.” Cursor manages the account credentials. The npm installer is not required; it configures Codex only. The root OpenAI and Claude connection configurations retain guest-capable `/api/mcp` access. Marketplace publication is subject to Cursor review.
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. The published npm installer remains version 0.3.2; the 0.3.3 instruction package has not been published to npm. To install the published version:
@@ -58,6 +70,10 @@ A successful claim returns a new account board ID and ends guest access. The age
 
 The portable root manifest and `mcp.json` support review for OpenAI's plugin directory. They declare mixed public and OAuth access: guests can discover tools without account authorization, and account operations use a registered public OAuth client with PKCE and normal consent. Its client ID is public metadata, not a credential. This does not alter the npm installer's automatic Codex registration. Guest discovery and optional account authorization need separate checks in each client; package validation does not establish directory approval or native-client acceptance. The native Codex package uses a separate compatible manifest and MCP file with automatic OAuth discovery; it does not copy the directory-only client ID. Use that native package in a supported desktop client, or the standalone installation above for Codex in the terminal and IDE. The portable directory ZIP is not interchangeable with the native ZIP. Avoid installing duplicate integrations in the same client.
 
+For custom connectors that request account authorization only during setup, use `https://www.easygerber.com/api/mcp/account` and complete sign-in and consent when connecting. This account entry requires OAuth before initialization and uses the same tools, permissions, and board services. The default `/api/mcp` entry continues to support guest use and optional account authorization.
+
+The two entries have distinct OAuth resources. Start a new connection when choosing the account entry; existing client registrations and tokens remain bound to their original resource. Do not copy tokens between entries. The published package manifests keep their existing connection URL.
+
 ## Claude
 
 The Claude package is prepared in the `claude` folder of the public repository, with `.claude-plugin/plugin.json` and `.mcp.json`. It shares the EasyGerber skill, artwork, and hosted service with the OpenAI packages. The npm installer remains Codex-only. For local validation and loading with Claude Code 2.1.281 or newer, from a checkout of the public repository:
@@ -84,7 +100,7 @@ Uninstall removes only unchanged files and the unchanged managed connection, pre
 
 ## Network and data
 
-The integration connects directly to `https://www.easygerber.com/api/mcp`; authorization uses the metadata and account flow advertised by that service. Tool requests can contain the board requirements, component selections, schematic edits, and board/organization identifiers needed for your task. Generated artifact links are returned by EasyGerber. The hosted service retains agent activity analytics for one year, including guest history after a board is claimed. The installer does not upload repositories, inspect environment files, run lifecycle hooks, or collect telemetry. Ordinary npm package retrieval is handled by npm.
+The integration connects directly to `https://www.easygerber.com/api/mcp`, or `/api/mcp/account` for the native Cursor manifest and consumer Grok account connector; authorization uses the metadata and account flow advertised by the selected entry. Tool requests can contain the board requirements, component selections, schematic edits, and board/organization identifiers needed for your task. Generated artifact links are returned by EasyGerber. The hosted service retains agent activity analytics for one year, including guest history after a board is claimed. The installer does not upload repositories, inspect environment files, run lifecycle hooks, or collect telemetry. Ordinary npm package retrieval is handled by npm.
 
 See [integration documentation and support](https://easygerber.com/agents), [privacy policy](https://easygerber.com/privacy), and [terms](https://easygerber.com/terms).
 
@@ -95,6 +111,8 @@ The package contains the installer runtime, connection metadata, skills, and ass
 The production service supports guest creation, layout, previews, blocker checks, both exports, and account saving. Validate those operations and the sign-in continuation with the exact package and client being released; earlier service or package checks do not establish acceptance of a new client artifact.
 
 The workflow and smoke test are excluded from the npm package and plugin ZIPs. The broader regression suite and release tooling remain in EasyGerber's private development checkout. That tooling creates the OpenAI ZIP, Claude ZIP, and public source from explicit file allowlists and verifies the resulting archive contents. The public source includes a generated `claude` folder: submit that plugin path in the existing repository. Claude requires the separate folder because the root npm installer has a `bin/` directory that Claude chat and Cowork cannot install. Shared skills and artwork are copied from their canonical sources during release; maintainers do not edit a second copy. The exported installer runtime uses only Node.js built-ins and the public `smol-toml` parser; it never imports EasyGerber's private packages. The Claude package contains only documentation, artwork, and remote connection metadata.
+
+The same release also generates the root `.cursor-plugin/plugin.json` from shared metadata. Its inline MCP connection selects the account entry without changing the root OpenAI authentication settings. Cursor uses the existing root skill and assets; there is no separate copy to maintain. The Cursor manifest is included only in the public repository, outside the npm package and OpenAI/Claude ZIPs. Submit the public repository URL for Cursor review.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 

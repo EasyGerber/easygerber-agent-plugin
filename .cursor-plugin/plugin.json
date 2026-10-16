@@ -1,0 +1,32 @@
+{
+  "name": "easygerber",
+  "version": "0.3.3",
+  "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
+  "author": {
+    "name": "EasyGerber"
+  },
+  "homepage": "https://easygerber.com/agents",
+  "license": "MIT",
+  "keywords": [
+    "easygerber",
+    "ai pcb design",
+    "pcb design",
+    "circuit board design",
+    "printed circuit board design",
+    "circuit design",
+    "schematic design",
+    "pcb layout",
+    "automatic pcb routing",
+    "electronic component search",
+    "3d pcb preview",
+    "gerber export",
+    "pcb manufacturing files",
+    "bill of materials"
+  ],
+  "logo": "assets/logo.svg",
+  "mcpServers": {
+    "easygerber": {
+      "url": "https://www.easygerber.com/api/mcp/account"
+    }
+  }
+}
