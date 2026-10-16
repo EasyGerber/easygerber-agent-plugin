@@ -6,6 +6,20 @@ Version 0.3.3 clarifies how a new board starts when account status is unknown, s
 
 Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
 
+## Grok
+
+Connect your EasyGerber account once to open and edit saved boards in consumer Grok:
+
+1. In Grok, open **Plugins → New Connector → Custom**.
+2. Name the connector **EasyGerber** and enter `https://www.easygerber.com/api/mcp/account` as the server URL.
+3. Complete EasyGerber sign-in and choose **Allow access**. Then ask Grok to open a saved board by its EasyGerber URL and make your requested changes.
+
+For example: “Open this saved EasyGerber board: [your board URL]. Rename it to LED indicator and read it again to confirm the change was saved.”
+
+This account entry requires authorization during connection setup and uses the existing EasyGerber tools and account permissions. For a new connection to the account entry, complete its normal sign-in flow. Existing published package configurations continue to use `/api/mcp`, which supports guest use and optional account authorization.
+
+On October 16, 2026, consumer Grok completed consent, read an existing private saved board, saved a temporary name change, and restored the original name. Both changes were confirmed after reopening the board on the EasyGerber website. Grok Bot has not been tested. Browser 3D rendering was not verified because WebGL was unavailable in the test browser. This consumer check does not establish Grok Build's interactive OAuth or model-driven board workflow.
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. The published npm installer remains version 0.3.2; the 0.3.3 instruction package has not been published to npm. To install the published version:
