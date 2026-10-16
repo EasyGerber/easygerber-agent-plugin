@@ -32,6 +32,21 @@ agent --plugin-dir .
 
 Enter `/mcp`, select **Easygerber (plugin)**, and choose **Manage Server → Login** to complete the browser consent flow. Then ask: “Open this saved EasyGerber board: [your board URL]. Read its current name and components.” Cursor manages the account credentials. The npm installer is not required; it configures Codex only. The root OpenAI and Claude connection configurations retain guest-capable `/api/mcp` access. Marketplace publication is subject to Cursor review.
 
+## Antigravity
+
+Design and lay out PCBs in Antigravity using published components, automatic placement and routing, schematic editing, and manufacturing exports. The public repository includes native Antigravity metadata and the shared EasyGerber skill. Its MCP connection uses `https://www.easygerber.com/api/mcp/account`; account permissions, plan limits, and generation billing still apply.
+
+Install the plugin from the public repository with the current Antigravity CLI and start a session:
+
+```sh
+agy plugin install https://github.com/EasyGerber/easygerber-agent-plugin
+agy
+```
+
+Use `/mcp` to inspect the EasyGerber connection. Complete EasyGerber sign-in and choose **Allow access** when Antigravity requests account authorization. Then ask: “Open this saved EasyGerber board: [your board URL]. Read its current name and components.” Antigravity manages the account credentials. The npm installer is not required. Marketplace publication is subject to Antigravity review.
+
+See the official [plugin guide](https://antigravity.google/docs/plugins) and [MCP guide](https://antigravity.google/docs/mcp).
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. The published npm installer remains version 0.3.2; the 0.3.3 instruction package has not been published to npm. To install the published version:
@@ -100,7 +115,7 @@ Uninstall removes only unchanged files and the unchanged managed connection, pre
 
 ## Network and data
 
-The integration connects directly to `https://www.easygerber.com/api/mcp`, or `/api/mcp/account` for the native Cursor manifest and consumer Grok account connector; authorization uses the metadata and account flow advertised by the selected entry. Tool requests can contain the board requirements, component selections, schematic edits, and board/organization identifiers needed for your task. Generated artifact links are returned by EasyGerber. The hosted service retains agent activity analytics for one year, including guest history after a board is claimed. The installer does not upload repositories, inspect environment files, run lifecycle hooks, or collect telemetry. Ordinary npm package retrieval is handled by npm.
+The integration connects directly to `https://www.easygerber.com/api/mcp`, or `/api/mcp/account` for the native Cursor and Antigravity configurations and consumer Grok account connector; authorization uses the metadata and account flow advertised by the selected entry. Tool requests can contain the board requirements, component selections, schematic edits, and board/organization identifiers needed for your task. Generated artifact links are returned by EasyGerber. The hosted service retains agent activity analytics for one year, including guest history after a board is claimed. The installer does not upload repositories, inspect environment files, run lifecycle hooks, or collect telemetry. Ordinary npm package retrieval is handled by npm.
 
 See [integration documentation and support](https://easygerber.com/agents), [privacy policy](https://easygerber.com/privacy), and [terms](https://easygerber.com/terms).
 
@@ -113,6 +128,8 @@ The production service supports guest creation, layout, previews, blocker checks
 The workflow and smoke test are excluded from the npm package and plugin ZIPs. The broader regression suite and release tooling remain in EasyGerber's private development checkout. That tooling creates the OpenAI ZIP, Claude ZIP, and public source from explicit file allowlists and verifies the resulting archive contents. The public source includes a generated `claude` folder: submit that plugin path in the existing repository. Claude requires the separate folder because the root npm installer has a `bin/` directory that Claude chat and Cowork cannot install. Shared skills and artwork are copied from their canonical sources during release; maintainers do not edit a second copy. The exported installer runtime uses only Node.js built-ins and the public `smol-toml` parser; it never imports EasyGerber's private packages. The Claude package contains only documentation, artwork, and remote connection metadata.
 
 The same release also generates the root `.cursor-plugin/plugin.json` from shared metadata. Its inline MCP connection selects the account entry without changing the root OpenAI authentication settings. Cursor uses the existing root skill and assets; there is no separate copy to maintain. The Cursor manifest is included only in the public repository, outside the npm package and OpenAI/Claude ZIPs. Submit the public repository URL for Cursor review.
+
+Antigravity uses the generated `.antigravity-plugin/plugin.json` and root `mcp_config.json` with the same root skill and artwork. These two files are included only in the public repository, outside the npm package and OpenAI/Claude ZIPs. The root OpenAI manifest and the other clients' configurations remain unchanged.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 
