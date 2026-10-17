@@ -2,7 +2,7 @@
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-The repository and plugin instructions are version 0.3.3. They start a new guest board directly when account status is unknown, without probing account-only tools such as `get_profile` first. Existing guest sessions and authorized accounts are reused. The npm installer remains at 0.3.2 and does not yet include that instruction clarification; the tool contract and installer runtime are unchanged.
+The published repository and plugin instruction baseline is version 0.3.3. It starts a new guest board directly when account status is unknown, without probing account-only tools such as `get_profile` first. Existing guest sessions and authorized accounts are reused. The npm installer remains at 0.3.2 and does not yet include that instruction clarification. The hosted `delete_board` tool is discovered dynamically when the connected service advertises it. These instructions do not expand existing OAuth grants or the installer's default scopes.
 
 Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
 
@@ -78,9 +78,9 @@ For your saved account boards or organization work, connect EasyGerber from MCP 
 codex mcp login easygerber
 ```
 
-The client opens the account authorization flow and stores its credentials. The managed MCP configuration requests `boards:read`, `boards:write`, `boards:generate`, `boards:export`, and `offline_access`, so account consent covers board workflows and renewable access. Organization permissions, account limits, and the user's consent still control account access. The installer never asks for, reads, or stores access tokens or guest capabilities. `doctor` checks local configuration and skill integrity; it does not prove that authentication, guest mode, or the live service works.
+The client opens the account authorization flow and stores its credentials. The managed MCP configuration requests `boards:read`, `boards:write`, `boards:generate`, `boards:export`, and `offline_access`, so account consent covers ordinary board workflows and renewable access, without deletion. Deletion requires separate, explicit `boards:delete` consent; an existing `boards:write` grant is insufficient. Organization permissions, account limits, and the user's consent still control account access. The installer never asks for, reads, or stores access tokens or guest capabilities. `doctor` checks local configuration and skill integrity; it does not prove that authentication, guest mode, or the live service works.
 
-Try: “Use EasyGerber to create a board from the pin assignments in this firmware.” The agent reads relevant local code, selects published parts, and sends board requirements through the MCP service. Account scopes are `boards:read`, `boards:write`, `boards:generate`, and `boards:export`; organization permissions, quotas, and billing still apply.
+Try: “Use EasyGerber to create a board from the pin assignments in this firmware.” The agent reads relevant local code, selects published parts, and sends board requirements through the MCP service. Ordinary account scopes are `boards:read`, `boards:write`, `boards:generate`, and `boards:export`; organization permissions, quotas, and billing still apply.
 
 ## Try before signing up
 
@@ -88,9 +88,30 @@ Guest access is live on EasyGerber's production MCP service and uses the publish
 
 The agent keeps the guest capability in its tool context. Keep its private viewer link to return to the board; anyone with that link can access the guest design. Neither the raw token nor that link belongs in firmware repositories, public issues, or diagnostic logs. The viewer removes the token fragment and uses a private browser session. Guest access depends on keeping that capability or link; creating another session cannot recover a lost one. Download links expire after fifteen minutes, and export objects become eligible for cleanup twenty-four hours after creation. These artifact limits do not expire the guest board.
 
-For account ownership, account-based recovery, and additional boards under your normal plan, sign in or create an account from the private viewer. The viewer saves the board to your personal account automatically after that sign-in handoff. Simply opening a guest preview in a browser that was already signed in leaves it as a guest board. In an agent task with a guest board, choosing sign-in or account work likewise includes saving that board without a separate **Keep board** confirmation: the agent uses `claim_guest_board` with the original guest token to start authorization and retries the claim after normal account consent. Generic native Settings **Authenticate** has no guest-board context, so the agent must resume the claim after that sign-in; the callback alone does not save the board.
+For account ownership, account-based recovery, and additional boards under your normal plan, sign in or create an account from the private viewer. The viewer saves the board to your personal account automatically after that sign-in handoff. Simply opening a guest preview in a browser that was already signed in leaves it as a guest board. In an agent task with a guest board, choosing sign-in or account work likewise includes saving that board without a separate **Keep board** confirmation, except when signing in solely to delete an account board: the agent uses `claim_guest_board` with the original guest token to start authorization and retries the claim after normal account consent. Generic native Settings **Authenticate** has no guest-board context, so the agent must resume the claim after that sign-in; the callback alone does not save the board.
 
 A successful claim returns a new account board ID and ends guest access. The agent reads that account board before making further changes. If layout is still running, it waits and retries automatically without cancelling the job; if the claim fails or its response is lost, it retains the original token for a safe retry. Reuse the original guest session; do not create extra sessions to bypass the board limit or service protections. An expired account connection must be reauthorized; it does not silently become a guest connection.
+
+## Delete an account board
+
+Ask explicitly to delete a specified account board. The agent reads its current revision and calls `delete_board` only for that request. Deletion is permanent, has no restore operation, and cancels active jobs on the board. Creating, editing, or exporting a board does not authorize deletion or cleanup.
+
+Deletion requires separate `boards:delete` OAuth consent and personal ownership or an organization owner/admin role. The installer and default client configurations do not request that scope; the client must support obtaining the additional approval. An existing `boards:write` grant cannot delete boards. A client registration limited to the earlier scopes must be deliberately updated or replaced through the client's normal reconnect or registration flow before requesting deletion consent. Existing registrations and grants do not gain deletion access automatically. Guest boards cannot be deleted through this tool, and the agent must not claim one merely to delete it. Signing in solely to delete an account board does not authorize claiming an unrelated guest board.
+
+For the Codex installer's `easygerber` connection, which has no configured OAuth client ID, explicitly opt into deletion with these commands, verified with Codex CLI `0.163.0-alpha.10.2`:
+
+```sh
+codex mcp logout easygerber
+codex mcp login easygerber \
+  --scopes boards:read,boards:write,boards:generate,boards:export,boards:delete,offline_access \
+  --oauth-client-registration dcr
+```
+
+Logout clears the locally cached client ID and tokens. Login creates a fresh dynamic client registration with the listed scopes and opens the browser for fresh consent, including deletion. These flags apply to this login; they do not change the installer-managed scopes in `config.toml`. Logout does not revoke the previous server-side client or grant. See the [Codex CLI scope selection and logout implementation](https://github.com/openai/codex/blob/4ebc485ca321243727539187169425fcf972f2c4/codex-rs/cli/src/mcp_cmd.rs#L584).
+
+A connection with a configured OAuth client ID bypasses dynamic registration even with this flag. Its provider registration must allow `boards:delete` before the client can obtain fresh consent; the commands above are not a general fix for native plugins or other clients. See [Codex OAuth client registration](https://learn.chatgpt.com/docs/extend/mcp?surface=cli#oauth-client-registration). After authorization, the agent still reads the specified account board again and deletes only on the user's explicit request.
+
+Only a successful `{ boardId, deleted: true }` response confirms deletion. With the required OAuth scope, unavailable boards, insufficient ownership, and repeated requests for an absent board return `not_found`; this result does not prove that a deletion occurred. If the response is lost, the agent reports uncertainty rather than treating a later missing-board result as confirmation.
 
 ## ChatGPT and native Codex plugins
 
