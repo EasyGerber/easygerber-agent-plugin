@@ -121,6 +121,8 @@ See [integration documentation and support](https://easygerber.com/agents), [pri
 
 ## Maintainer validation and release
 
+The repository's `server.json` describes the published [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/0.1.0) for PCB design and layout at `https://www.easygerber.com/api/mcp/account`. This account entry uses normal OAuth consent. The manifest is exported only to the public repository; the existing npm and plugin packages retain their connection settings and contain no local MCP server or private engines. Registry version `0.1.0` tracks the hosted service independently of plugin version `0.3.3`.
+
 The package contains the installer runtime, connection metadata, skills, and assets. The public repository also contains a GitHub Actions workflow and an installer smoke test. On pushes and pull requests, the workflow checks the packed installer on Linux, Windows, and macOS with Node.js 22 and 24. It tests temporary user profiles without connecting to EasyGerber or using account credentials. These checks cover installation behavior; they do not certify authentication or board operations in a particular agent client. See the [Actions results](https://github.com/EasyGerber/easygerber-agent-plugin/actions) for actual run status.
 
 The production service supports guest creation, layout, previews, blocker checks, both exports, and account saving. Validate those operations and the sign-in continuation with the exact package and client being released; earlier service or package checks do not establish acceptance of a new client artifact.

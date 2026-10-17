@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.EasyGerber/easygerber",
+  "title": "EasyGerber PCB Design and Layout",
+  "description": "PCB design and PCB layout with catalog parts, routing, checks, Gerber export and schematic editing.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/EasyGerber/easygerber-agent-plugin",
+    "source": "github"
+  },
+  "websiteUrl": "https://www.easygerber.com/agents",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://www.easygerber.com/api/mcp/account"
+    }
+  ]
+}
