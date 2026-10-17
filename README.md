@@ -2,7 +2,7 @@
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-The published repository and plugin instruction baseline is version 0.3.3. It starts a new guest board directly when account status is unknown, without probing account-only tools such as `get_profile` first. Existing guest sessions and authorized accounts are reused. The npm installer remains at 0.3.2 and does not yet include that instruction clarification. The hosted `delete_board` tool is discovered dynamically when the connected service advertises it. These instructions do not expand existing OAuth grants or the installer's default scopes.
+This package and its plugin instructions are version 0.3.3. It starts a new guest board directly when account status is unknown, without probing account-only tools such as `get_profile` first. Existing guest sessions and authorized accounts are reused. It also includes instructions for separately authorized account-board deletion. The hosted `delete_board` tool is discovered dynamically when the connected service advertises it. These instructions do not expand existing OAuth grants or the installer's default scopes.
 
 Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
 
@@ -60,12 +60,12 @@ See the official [plugin guide](https://antigravity.google/docs/plugins) and [MC
 
 ## Codex in VS Code or the terminal
 
-Requires Node.js 22 or newer and Codex. The published npm installer remains version 0.3.2; the 0.3.3 instruction package has not been published to npm. To install the published version:
+Requires Node.js 22 or newer and Codex. To install version 0.3.3:
 
 ```sh
-npx @easygerber/agent-plugin@0.3.2 setup --dry-run
-npx @easygerber/agent-plugin@0.3.2 setup
-npx @easygerber/agent-plugin@0.3.2 doctor
+npx @easygerber/agent-plugin@0.3.3 setup --dry-run
+npx @easygerber/agent-plugin@0.3.3 setup
+npx @easygerber/agent-plugin@0.3.3 doctor
 ```
 
 Setup installs `~/.agents/skills/easygerber` and adds a small managed MCP table to `$CODEX_HOME/config.toml` (default `~/.codex/config.toml`). It preserves existing TOML text and other servers. An ownership receipt lives in `~/.easygerber/agent-plugin/codex-install.json`. No project files or firmware are changed. Codex is the default and only installer target; optional `--client codex` makes that choice explicit. All commands support unattended use, and `--yes` is accepted for scripts.
@@ -134,13 +134,13 @@ Use `/mcp` in Claude Code to inspect the EasyGerber connection and authorize acc
 
 ## Update and remove
 
-Run `npx @easygerber/agent-plugin@0.3.2 setup`, then restart the Codex chat/IDE to load the automatic-save instructions and current tools. Upgrading from 0.2.x also replaces the retired `score_board` name with `check_board_layout`; no compatibility alias is provided.
+Run `npx @easygerber/agent-plugin@0.3.3 setup`, then restart the Codex chat/IDE to load the current guest-start, account-saving, and deletion instructions. Upgrading from 0.2.x also replaces the retired `score_board` name with `check_board_layout`; no compatibility alias is provided.
 
 Run `setup` from the new package version to update unchanged managed files. Repeating the same setup is a no-op. A conflicting MCP entry or modified skill file causes setup to stop without replacing it. Keep the file, or move it aside yourself before retrying. Symlinked managed destinations are refused to avoid changing unexpected locations.
 
 ```sh
-npx @easygerber/agent-plugin@0.3.2 uninstall --dry-run
-npx @easygerber/agent-plugin@0.3.2 uninstall
+npx @easygerber/agent-plugin@0.3.3 uninstall --dry-run
+npx @easygerber/agent-plugin@0.3.3 uninstall
 ```
 
 Uninstall removes only unchanged files and the unchanged managed connection, preserving unrelated settings and modified files. It reports preserved paths and retains their ownership receipt. Revoke the account connection separately in Codex or EasyGerber; deleting local files does not revoke OAuth grants or invalidate an existing guest viewer link. Guest access ends after claim or revocation, not on an automatic timer. Retired guest data becomes eligible for cleanup twenty-four hours after claim or revocation; the claimed account copy stays available. Interrupted setup can resume from its receipt. If a stale installer lock remains, verify no installer process is running before removing the lock path reported by the CLI.
@@ -153,9 +153,11 @@ See [integration documentation and support](https://easygerber.com/agents), [pri
 
 ## Maintainer validation and release
 
-The repository's `server.json` declares release `0.1.1` of the [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/latest), using the general `https://www.easygerber.com/api/mcp` URL for guest discovery and optional account authorization. Directories that import Registry metadata should use that URL for guest-first access. Account-only client configurations remain available separately as described above. The manifest is exported only to the public repository; the npm and plugin packages contain no local MCP server or private engines. Registry version `0.1.1` tracks hosted-service metadata independently of plugin version `0.3.3` and npm version `0.3.2`.
+The repository's `server.json` declares release `0.1.1` of the [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/latest), using the general `https://www.easygerber.com/api/mcp` URL for guest discovery and optional account authorization. Directories that import Registry metadata should use that URL for guest-first access. Account-only client configurations remain available separately as described above. The manifest is exported only to the public repository; the npm and plugin packages contain no local MCP server or private engines. Registry version `0.1.1` tracks hosted-service metadata independently of npm and plugin version `0.3.3`.
 
-The product's normal save and release scripts do not publish the public integration repository or MCP Registry. The private checkout's `npm run release:agent-plugin -- --output <directory>` prepares sanitized artifacts; `npm run check:agent-release -- --release-dir <directory>` verifies them. Publish only the generated `public-source` files to the existing public repository, preserving reviewed client configurations. Validate `public-source/server.json` with `mcp-publisher validate`, then publish it with `mcp-publisher publish` under the existing Registry identity and verify the latest metadata. Registry versions are immutable, so metadata changes require a new Registry version; this remote-only update does not require publishing an npm package.
+The product's normal save and release scripts do not publish npm, the public integration repository, or MCP Registry. The private checkout's `npm run release:agent-plugin -- --output <directory>` prepares sanitized artifacts; `npm run check:agent-release -- --release-dir <directory>` verifies them. Publish only the generated `public-source` files to the existing public repository, preserving reviewed client configurations. Validate `public-source/server.json` with `mcp-publisher validate`, then publish it with `mcp-publisher publish` under the existing Registry identity and verify the latest metadata. Registry versions are immutable, so Registry metadata changes require a new Registry version independently of npm package releases.
+
+For npm version 0.3.3, run `npm pack --ignore-scripts --pack-destination ..` from `<directory>/public-source`. From the private checkout, verify the resulting archive with `npm run check:agent-release -- --release-dir <directory> --npm-tarball <directory>/easygerber-agent-plugin-0.3.3.tgz`. Publish that exact verified archive with `npm publish <directory>/easygerber-agent-plugin-0.3.3.tgz --access public`.
 
 The package contains the installer runtime, connection metadata, skills, and assets. The public repository also contains a GitHub Actions workflow and an installer smoke test. On pushes and pull requests, the workflow checks the packed installer on Linux, Windows, and macOS with Node.js 22 and 24. It tests temporary user profiles without connecting to EasyGerber or using account credentials. These checks cover installation behavior; they do not certify authentication or board operations in a particular agent client. See the [Actions results](https://github.com/EasyGerber/easygerber-agent-plugin/actions) for actual run status.
 
