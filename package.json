@@ -1,7 +1,7 @@
 {
   "name": "@easygerber/agent-plugin",
   "version": "0.3.3",
-  "description": "EasyGerber skills and remote MCP connection for board design in coding agents.",
+  "description": "AI PCB design, layout, and routing",
   "type": "module",
   "license": "MIT",
   "author": "EasyGerber",

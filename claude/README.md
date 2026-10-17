@@ -2,6 +2,8 @@
 
 ![EasyGerber](assets/logo.svg)
 
+AI PCB design, layout, and routing.
+
 Design circuit boards with AI, from your first idea to the files your manufacturer needs. Describe what you want to build in everyday language, or start with the pin assignments in your firmware.
 
 Choose from over one million electronic components in EasyGerber’s catalog, including LEDs, sensors, connectors, and microcontrollers. Build with real catalog parts, their footprints, and available 3D models—from a simple LED circuit to a custom electronics project.
@@ -10,7 +12,7 @@ Create and edit schematics, generate PCB layouts with automatic component placem
 
 Download Gerber files, drill files, a bill of materials (BOM), component placement files, and an editable EasyGerber file to continue working on your design.
 
-Start with one guest board without signing up. When you connect your account, your guest design is saved automatically.
+Start with one guest board without signing up through `https://www.easygerber.com/api/mcp`. No account authorization is needed for guest access. When you sign in during the task, the agent saves the guest board to your account after consent. If you connect through client settings, resume the task so the agent can finish saving it; the sign-in callback alone does not transfer the board.
 
 ## Load the plugin
 
@@ -23,7 +25,7 @@ claude plugin validate ./claude --strict
 claude --plugin-dir ./claude
 ```
 
-In Claude Code, use `/mcp` to inspect the EasyGerber connection and authorize account access when needed. In Claude chat and Cowork, a remote MCP server appears on the plugin’s Connectors tab, where you add or connect it. Directory availability and client acceptance require separate review and testing; this package does not claim directory approval.
+In Claude Code, use `/mcp` to inspect the EasyGerber connection and authorize account access when needed. In Claude chat and Cowork, a remote MCP server appears on the plugin’s Connectors tab, where you add or connect it. EasyGerber is approved and published in the Claude directory with guest access.
 
 Try: “Create a small 3.3 V LED board, show a preview, and export the manufacturing files and EasyGerber file.” Use an authorized account if connected; otherwise the service supports one guest board per session. The guest board has no automatic expiry, while generated download links expire after fifteen minutes. The private guest viewer link grants access to the design; keep it private. Signing in during that task includes saving its guest board to your personal account. The agent retains the original guest capability for the claim and continues with the returned account board.
 

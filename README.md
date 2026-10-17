@@ -1,10 +1,21 @@
-# EasyGerber agent integration
+# EasyGerber: AI PCB design, layout, and routing
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-Version 0.3.3 clarifies how a new board starts when account status is unknown, so account-only connection checks do not prompt for sign-in before the guest workflow can begin. Existing guest sessions and authorized accounts are reused. Signing in still saves that task’s guest board to the personal account without another save confirmation. The tool contract and installer runtime are unchanged.
+The repository and plugin instructions are version 0.3.3. They start a new guest board directly when account status is unknown, without probing account-only tools such as `get_profile` first. Existing guest sessions and authorized accounts are reused. The npm installer remains at 0.3.2 and does not yet include that instruction clarification; the tool contract and installer runtime are unchanged.
 
 Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
+
+## Start without signing up
+
+Use **`https://www.easygerber.com/api/mcp`** for guest-first access. No EasyGerber account, OAuth grant, or API key is needed to connect, initialize, or discover tools. An agent starts a private session with `start_guest_session`, then uses its `guestToken` for catalog searches and work on that session's one board, including layout, checks, previews, and exports. Keep the token and private viewer link private.
+
+| Connection URL | When to use it | Sign-in |
+| --- | --- | --- |
+| `https://www.easygerber.com/api/mcp` | General MCP connections and guest-first directory listings | Not required for guests; required for account boards, organization access, and saving a guest board to an account |
+| `https://www.easygerber.com/api/mcp/account` | Saved account boards in clients that request OAuth only during setup | Required before initialization or tool discovery; this connection does not start in guest mode |
+
+The Codex installer, OpenAI packages, and Claude package use the general URL. The Grok account connector and native Cursor and Antigravity configurations below use the account-only URL. For a new guest connection, leave authentication unset; a rejected existing account credential must be reauthorized and will not silently become a guest connection. See **Try before signing up** for session limits and saving a guest board.
 
 ## Grok
 
@@ -85,7 +96,7 @@ A successful claim returns a new account board ID and ends guest access. The age
 
 The portable root manifest and `mcp.json` support review for OpenAI's plugin directory. They declare mixed public and OAuth access: guests can discover tools without account authorization, and account operations use a registered public OAuth client with PKCE and normal consent. Its client ID is public metadata, not a credential. This does not alter the npm installer's automatic Codex registration. Guest discovery and optional account authorization need separate checks in each client; package validation does not establish directory approval or native-client acceptance. The native Codex package uses a separate compatible manifest and MCP file with automatic OAuth discovery; it does not copy the directory-only client ID. Use that native package in a supported desktop client, or the standalone installation above for Codex in the terminal and IDE. The portable directory ZIP is not interchangeable with the native ZIP. Avoid installing duplicate integrations in the same client.
 
-For custom connectors that request account authorization only during setup, use `https://www.easygerber.com/api/mcp/account` and complete sign-in and consent when connecting. This account entry requires OAuth before initialization and uses the same tools, permissions, and board services. The default `/api/mcp` entry continues to support guest use and optional account authorization.
+For saved account boards in custom connectors that request account authorization only during setup, use `https://www.easygerber.com/api/mcp/account` and complete sign-in and consent when connecting. This account entry requires OAuth before initialization and uses the same tools, permissions, and board services. For guest-first access, use `https://www.easygerber.com/api/mcp`; account authorization is optional on that connection.
 
 The two entries have distinct OAuth resources. Start a new connection when choosing the account entry; existing client registrations and tokens remain bound to their original resource. Do not copy tokens between entries. The published package manifests keep their existing connection URL.
 
@@ -98,7 +109,7 @@ claude plugin validate ./claude --strict
 claude --plugin-dir ./claude
 ```
 
-Use `/mcp` in Claude Code to inspect the EasyGerber connection and authorize account access when needed. In Claude chat and Cowork, add or connect EasyGerber from the plugin’s Connectors tab. These packages require their own client and directory validation; preparing the Claude package does not mean it is listed or approved.
+Use `/mcp` in Claude Code to inspect the EasyGerber connection and authorize account access when needed. In Claude chat and Cowork, add or connect EasyGerber from the plugin’s Connectors tab. EasyGerber is approved and published in the Claude directory, with guest access through `/api/mcp`.
 
 ## Update and remove
 
@@ -121,7 +132,9 @@ See [integration documentation and support](https://easygerber.com/agents), [pri
 
 ## Maintainer validation and release
 
-The repository's `server.json` describes the published [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/0.1.0) for PCB design and layout at `https://www.easygerber.com/api/mcp/account`. This account entry uses normal OAuth consent. The manifest is exported only to the public repository; the existing npm and plugin packages retain their connection settings and contain no local MCP server or private engines. Registry version `0.1.0` tracks the hosted service independently of plugin version `0.3.3`.
+The repository's `server.json` declares release `0.1.1` of the [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/latest), using the general `https://www.easygerber.com/api/mcp` URL for guest discovery and optional account authorization. Directories that import Registry metadata should use that URL for guest-first access. Account-only client configurations remain available separately as described above. The manifest is exported only to the public repository; the npm and plugin packages contain no local MCP server or private engines. Registry version `0.1.1` tracks hosted-service metadata independently of plugin version `0.3.3` and npm version `0.3.2`.
+
+The product's normal save and release scripts do not publish the public integration repository or MCP Registry. The private checkout's `npm run release:agent-plugin -- --output <directory>` prepares sanitized artifacts; `npm run check:agent-release -- --release-dir <directory>` verifies them. Publish only the generated `public-source` files to the existing public repository, preserving reviewed client configurations. Validate `public-source/server.json` with `mcp-publisher validate`, then publish it with `mcp-publisher publish` under the existing Registry identity and verify the latest metadata. Registry versions are immutable, so metadata changes require a new Registry version; this remote-only update does not require publishing an npm package.
 
 The package contains the installer runtime, connection metadata, skills, and assets. The public repository also contains a GitHub Actions workflow and an installer smoke test. On pushes and pull requests, the workflow checks the packed installer on Linux, Windows, and macOS with Node.js 22 and 24. It tests temporary user profiles without connecting to EasyGerber or using account credentials. These checks cover installation behavior; they do not certify authentication or board operations in a particular agent client. See the [Actions results](https://github.com/EasyGerber/easygerber-agent-plugin/actions) for actual run status.
 

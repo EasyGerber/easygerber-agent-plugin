@@ -2,7 +2,7 @@
   "name": "easygerber",
   "displayName": "EasyGerber",
   "version": "0.3.3",
-  "description": "Design circuit boards using published EasyGerber components, generate layouts, and export manufacturing files.",
+  "description": "AI PCB design, layout, and routing",
   "author": {
     "name": "EasyGerber",
     "url": "https://easygerber.com"
