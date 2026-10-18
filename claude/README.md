@@ -12,7 +12,7 @@ Create and edit schematics, generate PCB layouts with automatic component placem
 
 Download Gerber files, drill files, a bill of materials (BOM), component placement files, and an editable EasyGerber file to continue working on your design.
 
-Start with one guest board without signing up through `https://www.easygerber.com/api/mcp`. No account authorization is needed for guest access. When you sign in to keep or continue working on the guest board, the agent saves it to your account after consent. If you connect through client settings for that purpose, resume the task so the agent can finish saving it; the sign-in callback alone does not transfer the board.
+Start with one guest board without signing up through `https://www.easygerber.com/api/mcp`. No account authorization is needed for guest access. When you sign in to keep or continue working on the guest board, the agent saves it to your account after consent. If you connect through client settings for that purpose, resume the task so the agent can finish saving it; the sign-in callback alone does not transfer the board. Signing in solely to delete an account board or submit feedback does not authorize claiming a guest board.
 
 ## Load the plugin
 
@@ -31,12 +31,18 @@ Try: “Create a small 3.3 V LED board, show a preview, and export the manufactu
 
 ## Connection and data
 
-The plugin connects directly to EasyGerber’s hosted MCP service at `https://www.easygerber.com/api/mcp`. It runs no local server, installer, hooks, or package downloads. Board layout, routing, and scoring run on EasyGerber’s servers. Claude can read relevant firmware locally to identify pin assignments; it sends only the board requirements, published component selections, schematic changes, and board or organization identifiers needed for the requested work. It should not upload an entire repository or unrelated files.
+The plugin connects directly to EasyGerber’s hosted MCP service at `https://www.easygerber.com/api/mcp`. It runs no local server, installer, hooks, or package downloads. Board layout, routing, and scoring run on EasyGerber’s servers. Claude can read relevant firmware locally to identify pin assignments; it sends only the board requirements, published component selections, schematic changes, board or organization identifiers, and feedback messages you approve for the requested work. It should not upload an entire repository or unrelated files.
 
 The remote service supplies catalog results, saved board data, previews, and private export links. Account access uses the service’s advertised OAuth flow and your consent. Do not paste credentials into chat or add tokens to plugin files. Organization permissions, plan limits, and normal request and compute protections apply. The service retains agent activity analytics for one year, including guest history after claim. Removing the plugin does not revoke account authorization or invalidate a private guest link; manage account connections in Claude or EasyGerber.
 
 To delete a specified account board, ask explicitly. The agent reads its current revision and uses `delete_board` only when the service advertises it. Deletion is permanent, has no restore operation, and cancels active jobs. It requires separate `boards:delete` consent through a client that supports requesting that scope, plus personal ownership or an organization owner/admin role; existing `boards:write` access is insufficient. A client registration that excludes this scope must be deliberately updated or replaced through the normal connection flow before consent; existing connections do not gain deletion access automatically. Guest deletion is unsupported, and a guest board must not be claimed merely to delete it. Signing in only to delete an account board does not authorize claiming a guest board. Only `{ boardId, deleted: true }` confirms deletion; `not_found` or a lost response does not.
 
 Creating or exporting a board does not purchase fabrication, make the design public, or delete the source board. A successful layout check is not a safety certification. The MIT license covers this integration package; the hosted service and private engines have separate terms.
+
+## Feedback and support
+
+Ask Claude to send EasyGerber a bug report, feature request, or general feedback. The `submit_feedback` tool sends only a message you ask or agree to share, from 10 to 2000 characters after trimming, to a private administrator inbox. It does not automatically attach transcripts, raw diagnostics, board exports, credentials, or private links. Anonymous feedback needs no account, guest session, or board. Existing valid account or guest access can attribute a report without additional board permissions; rejected credentials do not silently become anonymous. A guest board must never be claimed merely to submit feedback.
+
+The agent reuses the same request ID and identical report when retrying an uncertain submission. A receipt ID and timestamp confirm submission, without promising a response or roadmap commitment. If the connection or service is unavailable, use [GitHub Issues](https://github.com/EasyGerber/easygerber-agent-plugin/issues). Issues are public and require a GitHub account to post; remove credentials, private links, and confidential board data before publishing.
 
 See [documentation and support](https://easygerber.com/agents), [privacy policy](https://easygerber.com/privacy), and [terms](https://easygerber.com/terms).
