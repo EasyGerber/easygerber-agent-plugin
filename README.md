@@ -58,6 +58,41 @@ Use `/mcp` to inspect the EasyGerber connection. Complete EasyGerber sign-in and
 
 See the official [plugin guide](https://antigravity.google/docs/plugins) and [MCP guide](https://antigravity.google/docs/mcp).
 
+## Cline
+
+Cline can connect directly to EasyGerber's hosted MCP endpoint using Streamable HTTP. Use an existing Cline installation with a configured model. The npm setup installer in this repository configures Codex only; it is not the Cline installation path. No local EasyGerber server, build, or API key is needed for a new guest connection.
+
+In the Cline IDE panel, open **MCP Servers → Remote Servers**, enter **EasyGerber** as the server name and `https://www.easygerber.com/api/mcp` as the server URL, choose **Streamable HTTP**, and select **Add Server**. Leave authentication unset for guest access.
+
+Alternatively, open **MCP Servers → Configure → Configure MCP Servers** and merge this entry into the existing `mcpServers` object, preserving other servers and settings:
+
+```json
+{
+  "mcpServers": {
+    "easygerber": {
+      "type": "streamableHttp",
+      "url": "https://www.easygerber.com/api/mcp",
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+The explicit `streamableHttp` type matters: omitting it selects legacy SSE in Cline. Keep tool approval enabled. If `easygerber` already exists, inspect that entry instead of replacing it or creating a duplicate.
+
+With the current Cline CLI, the equivalent configuration command is:
+
+```sh
+cline mcp add easygerber https://www.easygerber.com/api/mcp --transport http --yes
+```
+
+This command saves the connection; it does not by itself prove successful setup. In Cline, verify that the connection succeeds and EasyGerber tools such as `search_parts`, `get_part`, and `start_guest_session` appear. For an installation-only check, stop after tool discovery; do not start a guest session, create or modify a board, generate a layout, export files, or send feedback.
+
+For later user-requested board work, guest access supports one board per session before signup. Saved account boards require EasyGerber OAuth consent. Clients that require authorization during connection setup can use the separate `https://www.easygerber.com/api/mcp/account` entry described above. Account authorization and board workflows need their own Cline validation; the guest connection check does not verify them.
+
+These instructions follow the official [Cline MCP guide](https://docs.cline.bot/mcp/mcp-overview). On October 18, 2026, Cline CLI 3.0.73 read the proposed README and wrote the native connection configuration into an empty isolated profile with tool approvals enabled. A separate check using its installed `@cline/core` 0.0.95 connected and discovered 17 EasyGerber tools without authentication. The agent itself did not verify discovery. No EasyGerber tool was called; OAuth and board operations were not tested.
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. To install version 0.3.4:
