@@ -93,6 +93,14 @@ For later user-requested board work, guest access supports one board per session
 
 These instructions follow the official [Cline MCP guide](https://docs.cline.bot/mcp/mcp-overview). On October 18, 2026, Cline CLI 3.0.73 read the proposed README and wrote the native connection configuration into an empty isolated profile with tool approvals enabled. A separate check using its installed `@cline/core` 0.0.95 connected and discovered 17 EasyGerber tools without authentication. The agent itself did not verify discovery. No EasyGerber tool was called; OAuth and board operations were not tested.
 
+## Kiro
+
+Install the [Kiro power folder](https://github.com/EasyGerber/easygerber-agent-plugin/tree/codex/agent-plugin/kiro) through **Powers → Add Custom Power**, or run `kiro-cli --v3 powers install ./kiro` from a local checkout of this public repository and start `kiro-cli --v3`. The npm installer is not needed. The power uses the guest-capable `/api/mcp` entry and includes the complete EasyGerber workflow in its skill.
+
+On October 18, 2026, Kiro CLI 2.32.0 V3 imported and explicitly activated the power, read its complete skill, and discovered 17 hosted tools without EasyGerber authentication. Its native guest workflow selected published parts, created and revised a board, completed layout generation, read preview data, checked for blockers, and exported manufacturing and EasyGerber files. A separately configured `/api/mcp/account` connection completed OAuth and successfully saved that guest board to a personal account after resuming the same conversation; a subsequent read confirmed the account board and its saved layout. A separate browser check rendered the saved board's 3D parts.
+
+The power's automatic mid-session OAuth did not complete in this CLI version. Use the optional account connection and resume instructions in the [Kiro README](https://github.com/EasyGerber/easygerber-agent-plugin/tree/codex/agent-plugin/kiro#readme) for account work and guest-board saving. Complete browser consent while Kiro's local callback listener is active; an earlier account-endpoint attempt expired after about 60 seconds, separately from the power's mid-session authorization-state error. Token refresh, deletion, feedback, and keyword-only activation remain untested in Kiro. Directory approval is separate from these checks.
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. To install version 0.3.4:
@@ -211,6 +219,8 @@ The workflow and smoke test are excluded from the npm package and plugin ZIPs. T
 The same release also generates the root `.cursor-plugin/plugin.json` from shared metadata. Its inline MCP connection selects the account entry without changing the root OpenAI authentication settings. Cursor uses the existing root skill and assets; there is no separate copy to maintain. The Cursor manifest is included only in the public repository, outside the npm package and OpenAI/Claude ZIPs. Submit the public repository URL for Cursor review.
 
 Antigravity uses the generated `.antigravity-plugin/plugin.json` and root `mcp_config.json` with the same root skill and artwork. These two files are included only in the public repository, outside the npm package and OpenAI/Claude ZIPs. The root OpenAI manifest and the other clients' configurations remain unchanged.
+
+Kiro uses the generated eight-file `kiro` folder with standard Agent Plugins manifests and the guest-capable endpoint. Its skill includes the complete canonical workflow inline because relative workflow references did not resolve in the tested native session. The standalone reference remains unchanged. The Kiro folder is repository-only and adds no files to the npm package or OpenAI/Claude ZIPs; submit its public folder URL for Kiro review.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 
