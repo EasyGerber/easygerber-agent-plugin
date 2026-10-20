@@ -124,6 +124,23 @@ For saved account boards or saving an existing guest board to an account, Gemini
 
 The extension is distributed through this repository and its dedicated Gemini release archive. To update an installed copy, run `gemini extensions update easygerber`. The `gemini-cli-extension` repository topic enables the gallery's daily discovery process; gallery indexing is separate from publication and is not Google endorsement or distribution in the consumer Gemini app.
 
+## Devin
+
+The public source export includes `.devin-plugin/plugin.json`, which connects to the guest-capable `https://www.easygerber.com/api/mcp` endpoint and loads the existing `skills/easygerber` workflow and artwork. Devin's own account sign-in is separate from EasyGerber authorization. A new EasyGerber guest connection needs no account or API key.
+
+For local validation, use a checkout of the exported public integration repository with a signed-in Devin CLI:
+
+```sh
+devin plugins install --local .
+devin
+```
+
+Start a new session after installation and use `/easygerber:easygerber` to load the workflow. Keep normal tool approvals enabled. For a minimal connection check, ask: “Use EasyGerber as a guest to find a published two-pin connector and confirm its catalog pins. Do not create a board.” The agent starts one guest session and uses the catalog tools; it must keep the guest token and private viewer link private.
+
+On October 20, 2026, Devin CLI 3000.11.92 installed the generated local package and discovered its shared skill and hosted MCP configuration. A fresh native session using the Free account's available SWE-1.6 Slow model created one guest session, searched published connectors, and read a returned part to confirm its two catalog pins. No board creation, layout, export, or EasyGerber account authorization was tested. The earlier SWE-2 attempt required Pro and stopped before calling a tool; no paid upgrade was purchased. Marketplace review and listing remain separate from these native checks.
+
+Devin documents `devin mcp login easygerber` for plugin OAuth connections. Account access, guest-to-account continuation, and board workflows need separate native validation; installing a plugin or listing tools does not establish those results. Marketplace submission and listing are separate from the shared package's release checks. See the official [Devin plugin guide](https://docs.devin.ai/cli/extensibility/plugins/overview).
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. To install version 0.3.4:
@@ -248,6 +265,8 @@ Antigravity uses the generated `.antigravity-plugin/plugin.json` and root `mcp_c
 Kiro uses the generated eight-file `kiro` folder with standard Agent Plugins manifests and the guest-capable endpoint. Its skill includes the complete canonical workflow inline because relative workflow references did not resolve in the tested native session. The standalone reference remains unchanged. The Kiro folder is repository-only and adds no files to the npm package or OpenAI/Claude ZIPs; submit its public folder URL for Kiro review.
 
 Gemini CLI uses the generated root `gemini-extension.json` and the same root skill. Its Streamable HTTP configuration uses `httpUrl` and leaves authorization optional for guest access. The release also generates `easygerber-gemini-extension-0.3.4.zip`, containing the manifest, shared skill and workflow reference, artwork, README, and license. The manifest and Gemini archive are outside the npm and other clients' packages. Publish that verified archive as the sole installable asset of the matching GitHub release; Gemini prefers the latest release when installing from the repository URL. Preserve historical releases, including the review video, and keep a valid extension archive on the latest release. No npm publication is needed for Gemini distribution.
+
+Devin uses the generated root `.devin-plugin/plugin.json`, with the shared root skill and `assets/logo.svg`. Its inline MCP configuration selects the general guest-capable endpoint; native Devin manifests do not automatically read the portable root `mcp.json`. This repository-only metadata adds no files to the npm package or other clients' archives. Marketplace entries reference the existing public repository at a reviewed full commit SHA. Before submitting one, follow the marketplace's native installation and real tool-call requirement. Preserve the published Gemini release and its asset when publishing repository-only metadata.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 

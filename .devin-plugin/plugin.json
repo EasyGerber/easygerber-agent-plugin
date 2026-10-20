@@ -1,0 +1,30 @@
+{
+  "name": "easygerber",
+  "displayName": "EasyGerber",
+  "description": "AI PCB design, layout, and routing",
+  "shortDescription": "AI PCB design, layout, and routing",
+  "homepage": "https://easygerber.com/agents",
+  "repository": "https://github.com/EasyGerber/easygerber-agent-plugin",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "easygerber",
+    "ai pcb design",
+    "pcb design",
+    "circuit board design",
+    "printed circuit board design",
+    "circuit design",
+    "schematic design",
+    "pcb layout",
+    "automatic pcb routing",
+    "electronic component search",
+    "3d pcb preview",
+    "gerber export",
+    "pcb manufacturing files",
+    "bill of materials"
+  ],
+  "mcpServers": {
+    "easygerber": {
+      "url": "https://www.easygerber.com/api/mcp"
+    }
+  }
+}
