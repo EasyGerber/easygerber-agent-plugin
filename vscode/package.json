@@ -1,0 +1,95 @@
+{
+  "name": "easygerber",
+  "displayName": "EasyGerber",
+  "description": "AI PCB design, layout, and routing",
+  "version": "0.3.4",
+  "publisher": "easygerber",
+  "license": "MIT",
+  "homepage": "https://easygerber.com/agents",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EasyGerber/easygerber-agent-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EasyGerber/easygerber-agent-plugin/issues"
+  },
+  "engines": {
+    "vscode": "^1.109.3"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "easygerber",
+    "ai pcb design",
+    "pcb design",
+    "circuit board design",
+    "printed circuit board design"
+  ],
+  "icon": "assets/logo.png",
+  "main": "./extension.cjs",
+  "activationEvents": [],
+  "extensionKind": [
+    "ui"
+  ],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "assets/icon.svg",
+    "assets/logo.svg",
+    "assets/logo.png",
+    "extension.cjs",
+    "package.json",
+    "skills/easygerber/SKILL.md",
+    "skills/easygerber/references/workflow.md"
+  ],
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "easygerber",
+        "label": "EasyGerber"
+      }
+    ],
+    "chatSkills": [
+      {
+        "path": "./skills/easygerber/SKILL.md"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "easygerber.getStarted",
+        "title": "Design a PCB with EasyGerber",
+        "description": "Connect the hosted service, load the workflow, and build with published parts.",
+        "steps": [
+          {
+            "id": "easygerber.connect",
+            "title": "Connect in VS Code Chat",
+            "description": "Use Chat Agent mode with a tool-capable model. Find EasyGerber in MCP: List Servers and keep normal tool approvals enabled. Use one EasyGerber connection at a time.\n[Integration documentation](https://easygerber.com/agents)",
+            "media": {
+              "image": "assets/logo.svg",
+              "altText": "EasyGerber circuit logo"
+            }
+          },
+          {
+            "id": "easygerber.design",
+            "title": "Load the PCB workflow",
+            "description": "Enter /easygerber in Chat. Describe a small circuit and use published catalog parts with verified pins. Start one guest board without an EasyGerber account. Generate its layout, inspect the preview, and check for blocking issues before exporting.",
+            "media": {
+              "image": "assets/logo.svg",
+              "altText": "EasyGerber circuit logo"
+            }
+          },
+          {
+            "id": "easygerber.privacy",
+            "title": "Keep board access private",
+            "description": "Guest tokens, board links, and exports are private. Placement, routing, and scoring run on EasyGerber servers. Account continuation uses native OAuth consent.\n[Privacy policy](https://easygerber.com/privacy)\n[Support](https://easygerber.com/agents)",
+            "media": {
+              "image": "assets/logo.svg",
+              "altText": "EasyGerber circuit logo"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
