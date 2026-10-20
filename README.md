@@ -103,6 +103,27 @@ On October 18, 2026, Kiro CLI 2.32.0 V3 imported and explicitly activated the po
 
 The power's automatic mid-session OAuth did not complete in this CLI version. Use the optional account connection and resume instructions in the [Kiro README](https://github.com/EasyGerber/easygerber-agent-plugin/tree/main/kiro#readme) for account work and guest-board saving. Complete browser consent while Kiro's local callback listener is active; an earlier account-endpoint attempt expired after about 60 seconds, separately from the power's mid-session authorization-state error. Token refresh, deletion, feedback, and keyword-only activation remain untested in Kiro. Directory approval is separate from these checks.
 
+## Gemini CLI
+
+Install the EasyGerber extension in the current [Gemini CLI](https://geminicli.com/docs/extensions/). Gemini's model sign-in is separate from EasyGerber: a new EasyGerber guest connection needs no account or API key.
+
+```sh
+gemini extensions install https://github.com/EasyGerber/easygerber-agent-plugin
+gemini extensions list
+gemini skills list
+gemini mcp list
+```
+
+Review the extension's MCP connection and accept the normal installation prompt. Restart an existing Gemini session after installation. Confirm that the `easygerber` extension and shared skill are enabled and that the EasyGerber MCP connection is available. Existing user or workspace settings with the same server or skill name can take precedence over an extension; inspect them if the displayed connection or skill comes from another source.
+
+The extension connects to `https://www.easygerber.com/api/mcp` using Streamable HTTP and loads the existing `skills/easygerber` workflow. It includes no local EasyGerber server or engine. Keep Gemini's normal tool approval prompts enabled. Try: “Use EasyGerber to create a board from the pin assignments in this firmware.” The agent selects published components and uses the guest workflow described above.
+
+Verified with Gemini CLI 0.65.0: extension installation, shared-skill discovery, and an active MCP connection. A separate check using that installed CLI's MCP transport discovered 17 tools and completed guest-session creation, published-part search, and part lookup. This check did not exercise an interactive model session, board creation, layout, export, or account authorization.
+
+For saved account boards or saving an existing guest board to an account, Gemini documents the interactive `/mcp auth easygerber` command. Complete EasyGerber consent, then resume the original task and guest-board claim if applicable. Guest discovery does not verify account OAuth, token refresh, or automatic authorization during a tool call. See [Gemini's MCP authorization documentation](https://geminicli.com/docs/tools/mcp-server/#oauth-support-for-remote-mcp-servers).
+
+The extension is distributed through this repository and its dedicated Gemini release archive. To update an installed copy, run `gemini extensions update easygerber`. The `gemini-cli-extension` repository topic enables the gallery's daily discovery process; gallery indexing is separate from publication and is not Google endorsement or distribution in the consumer Gemini app.
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. To install version 0.3.4:
@@ -225,6 +246,8 @@ The same release also generates the root `.cursor-plugin/plugin.json` from share
 Antigravity uses the generated `.antigravity-plugin/plugin.json` and root `mcp_config.json` with the same root skill and artwork. These two files are included only in the public repository, outside the npm package and OpenAI/Claude ZIPs. The root OpenAI manifest and the other clients' configurations remain unchanged.
 
 Kiro uses the generated eight-file `kiro` folder with standard Agent Plugins manifests and the guest-capable endpoint. Its skill includes the complete canonical workflow inline because relative workflow references did not resolve in the tested native session. The standalone reference remains unchanged. The Kiro folder is repository-only and adds no files to the npm package or OpenAI/Claude ZIPs; submit its public folder URL for Kiro review.
+
+Gemini CLI uses the generated root `gemini-extension.json` and the same root skill. Its Streamable HTTP configuration uses `httpUrl` and leaves authorization optional for guest access. The release also generates `easygerber-gemini-extension-0.3.4.zip`, containing the manifest, shared skill and workflow reference, artwork, README, and license. The manifest and Gemini archive are outside the npm and other clients' packages. Publish that verified archive as the sole installable asset of the matching GitHub release; Gemini prefers the latest release when installing from the repository URL. Preserve historical releases, including the review video, and keep a valid extension archive on the latest release. No npm publication is needed for Gemini distribution.
 
 Before publishing, confirm ownership of the npm scope, the official public integration repository, and the vendor publishing identities. Verify production sign-in and one complete create/revise/generate/export flow in supported clients. Inspect `npm pack --dry-run --json` from the public export. Publish only that sanitized package/repository; the product monorepo and its history stay private. Icons and listing copy in this package are editable release materials, not evidence of marketplace approval. Do not add npm install lifecycle hooks.
 

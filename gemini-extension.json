@@ -1,0 +1,10 @@
+{
+  "name": "easygerber",
+  "version": "0.3.4",
+  "description": "AI PCB design, layout, and routing",
+  "mcpServers": {
+    "easygerber": {
+      "httpUrl": "https://www.easygerber.com/api/mcp"
+    }
+  }
+}
