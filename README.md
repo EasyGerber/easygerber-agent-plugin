@@ -97,11 +97,11 @@ These instructions follow the official [Cline MCP guide](https://docs.cline.bot/
 
 ## Kiro
 
-Install the [Kiro power folder](https://github.com/EasyGerber/easygerber-agent-plugin/tree/codex/agent-plugin/kiro) through **Powers → Add Custom Power**, or run `kiro-cli --v3 powers install ./kiro` from a local checkout of this public repository and start `kiro-cli --v3`. The npm installer is not needed. The power uses the guest-capable `/api/mcp` entry and includes the complete EasyGerber workflow in its skill.
+Install the [Kiro power folder](https://github.com/EasyGerber/easygerber-agent-plugin/tree/main/kiro) through **Powers → Add Custom Power**, or run `kiro-cli --v3 powers install ./kiro` from a local checkout of this public repository and start `kiro-cli --v3`. The npm installer is not needed. The power uses the guest-capable `/api/mcp` entry and includes the complete EasyGerber workflow in its skill.
 
 On October 18, 2026, Kiro CLI 2.32.0 V3 imported and explicitly activated the power, read its complete skill, and discovered 17 hosted tools without EasyGerber authentication. Its native guest workflow selected published parts, created and revised a board, completed layout generation, read preview data, checked for blockers, and exported manufacturing and EasyGerber files. A separately configured `/api/mcp/account` connection completed OAuth and successfully saved that guest board to a personal account after resuming the same conversation; a subsequent read confirmed the account board and its saved layout. A separate browser check rendered the saved board's 3D parts.
 
-The power's automatic mid-session OAuth did not complete in this CLI version. Use the optional account connection and resume instructions in the [Kiro README](https://github.com/EasyGerber/easygerber-agent-plugin/tree/codex/agent-plugin/kiro#readme) for account work and guest-board saving. Complete browser consent while Kiro's local callback listener is active; an earlier account-endpoint attempt expired after about 60 seconds, separately from the power's mid-session authorization-state error. Token refresh, deletion, feedback, and keyword-only activation remain untested in Kiro. Directory approval is separate from these checks.
+The power's automatic mid-session OAuth did not complete in this CLI version. Use the optional account connection and resume instructions in the [Kiro README](https://github.com/EasyGerber/easygerber-agent-plugin/tree/main/kiro#readme) for account work and guest-board saving. Complete browser consent while Kiro's local callback listener is active; an earlier account-endpoint attempt expired after about 60 seconds, separately from the power's mid-session authorization-state error. Token refresh, deletion, feedback, and keyword-only activation remain untested in Kiro. Directory approval is separate from these checks.
 
 ## Codex in VS Code or the terminal
 
@@ -205,6 +205,8 @@ The integration connects directly to `https://www.easygerber.com/api/mcp`, or `/
 See [integration documentation and support](https://easygerber.com/agents), [privacy policy](https://easygerber.com/privacy), and [terms](https://easygerber.com/terms).
 
 ## Maintainer validation and release
+
+The public repository's default branch is `main`. The [square Grok marketplace logo](https://raw.githubusercontent.com/EasyGerber/easygerber-agent-plugin/main/assets/grok-marketplace.svg) is exported only to the repository, outside the npm and plugin packages. The archival `codex/grok-submission-assets` tag preserves the original artwork URL.
 
 The repository's `server.json` declares release `0.1.1` of the [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/latest), using the general `https://www.easygerber.com/api/mcp` URL for guest discovery and optional account authorization. Directories that import Registry metadata should use that URL for guest-first access. Account-only client configurations remain available separately as described above. The manifest is exported only to the public repository; the npm and plugin packages contain no local MCP server or private engines. Registry version `0.1.1` tracks hosted-service metadata independently of npm and plugin version `0.3.4`.
 

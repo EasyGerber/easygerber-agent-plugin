@@ -6,7 +6,7 @@ This power connects Kiro to EasyGerber's production service and includes the Eas
 
 ## Install
 
-Use the [Kiro power folder in the public repository](https://github.com/EasyGerber/easygerber-agent-plugin/tree/codex/agent-plugin/kiro). In Kiro, open **Powers → Add Custom Power** and import that GitHub folder, or choose **Import power from a folder** after downloading the repository and select its `kiro` folder containing `plugin.json`.
+Use the [Kiro power folder in the public repository](https://github.com/EasyGerber/easygerber-agent-plugin/tree/main/kiro). In Kiro, open **Powers → Add Custom Power** and import that GitHub folder, or choose **Import power from a folder** after downloading the repository and select its `kiro` folder containing `plugin.json`.
 
 From a local checkout of the public repository, Kiro CLI V3 supports:
 
