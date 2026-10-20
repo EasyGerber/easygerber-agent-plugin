@@ -1,5 +1,7 @@
 # EasyGerber: AI PCB design, layout, and routing
 
+[![Installer smoke tests](https://github.com/EasyGerber/easygerber-agent-plugin/actions/workflows/installer.yml/badge.svg)](https://github.com/EasyGerber/easygerber-agent-plugin/actions/workflows/installer.yml) [![npm version](https://img.shields.io/npm/v/@easygerber/agent-plugin)](https://www.npmjs.com/package/@easygerber/agent-plugin) [![Plugin license: MIT](https://img.shields.io/badge/plugin%20license-MIT-blue)](https://github.com/EasyGerber/easygerber-agent-plugin/blob/HEAD/LICENSE)
+
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
 This package and its plugin instructions are version 0.3.4. It adds `submit_feedback` guidance for user-approved bug reports, feature requests, and general feedback sent to EasyGerber's private administrator inbox. A report needs no account or new board. For new board work, it starts a guest board directly when account status is unknown, without probing account-only tools such as `get_profile` first. Existing guest sessions and authorized accounts are reused. It also includes instructions for separately authorized account-board deletion. Hosted tools are discovered dynamically when the connected service advertises them. These instructions do not expand existing OAuth grants or the installer's default scopes.
