@@ -1,6 +1,6 @@
 {
   "name": "easygerber",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "AI PCB design, layout, and routing",
   "mcpServers": {
     "easygerber": {

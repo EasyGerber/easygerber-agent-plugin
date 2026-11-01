@@ -2,7 +2,7 @@
   "name": "easygerber",
   "displayName": "EasyGerber",
   "description": "AI PCB design, layout, and routing",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "publisher": "easygerber",
   "license": "MIT",
   "homepage": "https://easygerber.com/agents",

@@ -17,7 +17,7 @@ code --install-extension easygerber.easygerber
 You can also install a reviewed release VSIX with **Extensions: Install from VSIX...** or:
 
 ```sh
-code --install-extension easygerber-vscode-extension-0.3.4.vsix
+code --install-extension easygerber-vscode-extension-0.3.5.vsix
 ```
 
 Open a new Chat session in Agent mode. Use `/easygerber` to load the PCB workflow, and keep normal tool approvals enabled. **MCP: List Servers** shows the extension's EasyGerber connection.
@@ -32,7 +32,7 @@ No EasyGerber account or API key is needed to start as a guest. For a small firs
 
 The workflow uses real catalog parts, their footprints, and available 3D models. The agent should wait for layout generation to finish and check the current saved revision before exporting. A saved schematic alone is not a finished PCB.
 
-A guest session supports one board and has no scheduled expiration. Its token, viewer link, and export links are private capabilities. Manufacturing and EasyGerber download links expire after fifteen minutes; that is separate from the lifetime of the guest board. Keep these links out of public issues and recordings.
+A guest session supports one board and has no scheduled expiration. Its token, viewer link, and export links are private capabilities. Manufacturing and EasyGerber exports have no automatic expiry. Their stable private links return the original exported snapshot and refresh storage authorization automatically. Downloads still require the original account or guest session to remain authorized; lost account permissions, guest claim or revocation, or explicit deletion can end access. Keep these links out of public issues and recordings.
 
 ## Continue with your EasyGerber account
 
