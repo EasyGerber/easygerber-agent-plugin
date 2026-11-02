@@ -8,9 +8,9 @@ Design circuit boards with AI, from your first idea to the files your manufactur
 
 Choose from over one million electronic components in EasyGerber’s catalog, including LEDs, sensors, connectors, and microcontrollers. Build with real catalog parts, their footprints, and available 3D models—from a simple LED circuit to a custom electronics project.
 
-Create and edit schematics, generate PCB layouts with automatic component placement and routing, and refine your design through conversation. Adjust board settings, explore copper layers, inspect your board in interactive 3D, and check for blocking layout issues before exporting.
+Create and edit schematics, generate PCB layouts with automatic component placement and routing, and refine your design through conversation. Adjust board settings, explore copper layers, inspect your board in interactive 3D, and check for blocking layout issues before manufacturing export.
 
-Download Gerber files, drill files, a bill of materials (BOM), component placement files, and an editable EasyGerber file to continue working on your design.
+Download Gerber files, drill files, a bill of materials (BOM), component placement files, and an editable EasyGerber file to continue working on your design. Save an editable backup even before the layout is complete or up to date, without generating or checking a layout just to export it.
 
 Start with one guest board without signing up through `https://www.easygerber.com/api/mcp`. No account authorization is needed for guest access. When you sign in to keep or continue working on the guest board, the agent saves it to your account after consent. If you connect through client settings for that purpose, resume the task so the agent can finish saving it; the sign-in callback alone does not transfer the board. Signing in solely to delete an account board or submit feedback does not authorize claiming a guest board.
 
@@ -27,7 +27,7 @@ claude --plugin-dir ./claude
 
 In Claude Code, use `/mcp` to inspect the EasyGerber connection and authorize account access when needed. In Claude chat and Cowork, a remote MCP server appears on the plugin’s Connectors tab, where you add or connect it. EasyGerber is approved and published in the Claude directory with guest access.
 
-Try: “Create a small 3.3 V LED board, show a preview, and export the manufacturing files and EasyGerber file.” Use an authorized account if connected; otherwise the service supports one guest board per session. The guest board and exported files have no automatic expiry. Stable private download links return the original exported snapshot and refresh storage authorization automatically. Downloads still require the original account or guest session to remain authorized; lost account permissions, guest claim or revocation, or explicit deletion can end access. The private guest viewer link grants access to the design; keep it private. Signing in to continue working on that guest board includes saving it to your personal account. The agent retains the original guest capability for the claim and continues with the returned account board.
+Try: “Create a small 3.3 V LED board, show a preview, and export the manufacturing files and EasyGerber file.” Use an authorized account if connected; otherwise the service supports one guest board per session. The guest board and exported files have no automatic expiry. New exports require current board access. Issued private download links retain the exact exported snapshot after board edits or deletion, guest claim, and guest cleanup. Only explicit download-link revocation or deletion of the exported file ends access. Anyone with a complete download link can download its file, so keep it private. The download page refreshes storage authorization automatically. The private guest viewer link grants access to the design; keep it private. Signing in to continue working on that guest board includes saving it to your personal account. The agent retains the original guest capability for the claim and continues with the returned account board.
 
 ## Connection and data
 

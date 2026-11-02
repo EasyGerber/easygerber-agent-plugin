@@ -17,7 +17,7 @@ code --install-extension easygerber.easygerber
 You can also install a reviewed release VSIX with **Extensions: Install from VSIX...** or:
 
 ```sh
-code --install-extension easygerber-vscode-extension-0.3.5.vsix
+code --install-extension easygerber-vscode-extension-0.3.6.vsix
 ```
 
 Open a new Chat session in Agent mode. Use `/easygerber` to load the PCB workflow, and keep normal tool approvals enabled. **MCP: List Servers** shows the extension's EasyGerber connection.
@@ -30,9 +30,9 @@ No EasyGerber account or API key is needed to start as a guest. For a small firs
 
 > Use EasyGerber to make a passive signal-and-ground pass-through board with two published two-pin connectors. Confirm their catalog pins, use the app's supported defaults, generate the layout, show the preview, check for blocking issues, and export the manufacturing ZIP and editable EasyGerber file. Do not place an order.
 
-The workflow uses real catalog parts, their footprints, and available 3D models. The agent should wait for layout generation to finish and check the current saved revision before exporting. A saved schematic alone is not a finished PCB.
+The workflow uses real catalog parts, their footprints, and available 3D models. For manufacturing export, the agent should wait for layout generation to finish and check the current saved revision. A saved schematic alone is not a finished PCB. An editable EasyGerber backup can be exported directly from the saved project, even with missing, incomplete, or stale layout; it does not require generation or a layout check.
 
-A guest session supports one board and has no scheduled expiration. Its token, viewer link, and export links are private capabilities. Manufacturing and EasyGerber exports have no automatic expiry. Their stable private links return the original exported snapshot and refresh storage authorization automatically. Downloads still require the original account or guest session to remain authorized; lost account permissions, guest claim or revocation, or explicit deletion can end access. Keep these links out of public issues and recordings.
+A guest session supports one board and has no scheduled expiration. Its token, viewer link, and export links are private capabilities. New manufacturing and EasyGerber exports require current board access. Issued download links have no automatic expiry and retain the exact exported snapshot after board edits or deletion, guest claim, and guest cleanup. Only explicit download-link revocation or deletion of the exported file ends access. The download page refreshes storage authorization automatically. Anyone with a complete download link can download its file; keep these links out of public issues and recordings.
 
 ## Continue with your EasyGerber account
 

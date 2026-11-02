@@ -2,7 +2,7 @@
   "name": "easygerber",
   "displayName": "EasyGerber",
   "description": "AI PCB design, layout, and routing",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "publisher": "easygerber",
   "license": "MIT",
   "homepage": "https://easygerber.com/agents",
@@ -73,7 +73,7 @@
           {
             "id": "easygerber.design",
             "title": "Load the PCB workflow",
-            "description": "Enter /easygerber in Chat. Describe a small circuit and use published catalog parts with verified pins. Start one guest board without an EasyGerber account. Generate its layout, inspect the preview, and check for blocking issues before exporting.",
+            "description": "Enter /easygerber in Chat. Describe a small circuit and use published catalog parts with verified pins. Start one guest board without an EasyGerber account. Generate its layout, inspect the preview, and check for blocking issues before manufacturing export. Editable EasyGerber backups can be exported without generating or checking a layout.",
             "media": {
               "image": "assets/logo.svg",
               "altText": "EasyGerber circuit logo"
