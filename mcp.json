@@ -9,7 +9,7 @@
           "auth": {
             "type": "mixed",
             "client": {"mode": "provided", "clientId": "AjOfIMjRZXJjsTJlNseULYxpjBIjphtQ", "tokenEndpointAuthMethod": "none"},
-            "baseScopes": ["boards:read", "boards:write", "boards:generate", "boards:export", "offline_access"]
+            "defaultScopes": ["boards:read", "boards:write", "boards:generate", "boards:export", "offline_access"]
           }
         }
       }

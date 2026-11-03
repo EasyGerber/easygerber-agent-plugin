@@ -11,7 +11,7 @@ Installs a standalone skill and remote MCP connection for the current user.
 Works with Codex CLI and IDE; no firmware or project files are changed.
 --dry-run lists changes without writing files. --yes permits unattended use.
 Codex is the default and only installer target in this release. Node.js 22+ is required.
-Ask for a board: the agent uses your connected account or starts a guest board automatically.
+Ask for a board: the agent uses your connected account or establishes private access automatically.
 Guest boards have no automatic expiry or lifetime edit/layout/export caps; service protections apply.
 Account authorization is optional for the guest trial and completed in Codex's MCP sign-in flow.
 `
@@ -51,8 +51,8 @@ export async function runCli(args, options = {}) {
     for (const target of result.preserved) output(`Preserved modified file: ${target}`)
     if (command === 'setup' && !dryRun) {
       output('Restart the Codex chat/IDE to load the skill, then ask EasyGerber to create a board, show its preview, and export the files.')
-      output('Use your connected account or start a guest board automatically. To connect an account, use Codex MCP settings or run: codex mcp login easygerber')
-      output('After sign-in, the agent resumes saving the current task’s guest board automatically, without another save confirmation.')
+      output('Create and continue a board with one private reference. To connect an account, use Codex MCP settings or run: codex mcp login easygerber')
+      output('After sign-in, continue the same board; its reference stays the same while the service saves it to your account.')
       output('Do not install the native plugin alongside this standalone skill and connection.')
     }
     if (command === 'uninstall' && !dryRun) output('Local files were removed where unchanged. Disconnect/revoke EasyGerber authorization separately in Codex or your EasyGerber account.')
