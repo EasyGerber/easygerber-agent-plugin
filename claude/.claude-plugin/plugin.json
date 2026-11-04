@@ -8,6 +8,7 @@
     "url": "https://easygerber.com"
   },
   "homepage": "https://easygerber.com/agents",
+  "privacyPolicyUrl": "https://easygerber.com/privacy",
   "license": "MIT",
   "keywords": [
     "easygerber",
