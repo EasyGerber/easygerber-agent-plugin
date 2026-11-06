@@ -1,6 +1,6 @@
 {
   "name": "@easygerber/agent-plugin",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "AI PCB design, layout, and routing",
   "type": "module",
   "license": "MIT",

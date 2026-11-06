@@ -4,7 +4,7 @@
 
 This package connects coding agents to EasyGerber's hosted board-design tools. Its public files contain workflow instructions, connection metadata, icons, and a small installer. Board layout, routing, and scoring run on EasyGerber's servers.
 
-Version 0.3.8 uses one private board reference for creation and continued work. The service selects account ownership or private access automatically, exposes the current layout job for status reads, and preserves existing-client compatibility. Ordinary OpenAI sign-in explicitly requests only workflow permissions; deletion remains a separate consent. Hosted tools and package instructions must both be current; package checks alone do not establish a live client workflow.
+Version 0.3.9 simplifies the first starter example to request manufacturing files. The package uses one private board reference for creation and continued work. The service selects account ownership or private access automatically, exposes the current layout job for status reads, and preserves existing-client compatibility. Ordinary OpenAI sign-in explicitly requests only workflow permissions; deletion remains a separate consent. Hosted tools and package instructions must both be current; package checks alone do not establish a live client workflow.
 
 Source is available in the [public integration repository](https://github.com/EasyGerber/easygerber-agent-plugin). The npm installer and platform plugin packages have separate client-validation processes and share the EasyGerber workflow skill and hosted service.
 
@@ -153,7 +153,7 @@ npx @easygerber/agent-plugin@0.3.8 doctor
 
 Setup installs `~/.agents/skills/easygerber` and adds a small managed MCP table to `$CODEX_HOME/config.toml` (default `~/.codex/config.toml`). It preserves existing TOML text and other servers. An ownership receipt lives in `~/.easygerber/agent-plugin/codex-install.json`. No project files or firmware are changed. Codex is the default and only installer target; optional `--client codex` makes that choice explicit. All commands support unattended use, and `--yes` is accepted for scripts.
 
-Restart the Codex chat/IDE after setup, then ask: “Create a small 3.3 V LED board, show a preview, and export the manufacturing files and EasyGerber file.” The agent uses your connected account or starts a guest board automatically through `https://www.easygerber.com/api/mcp`.
+Restart the Codex chat/IDE after setup, then ask: “Create a small 3.3 V LED board, show a preview, and export the manufacturing files.” The agent uses your connected account or starts a guest board automatically through `https://www.easygerber.com/api/mcp`.
 
 For your saved account boards or organization work, connect EasyGerber from MCP settings. If Codex CLI is installed, run:
 
