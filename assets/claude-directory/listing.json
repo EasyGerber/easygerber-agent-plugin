@@ -1,0 +1,22 @@
+{
+  "logo": {
+    "source": "../logo.svg",
+    "url": "https://www.easygerber.com/integrations/claude/logo.svg"
+  },
+  "images": [
+    {
+      "image": "easygerber-orbit-led-dial.png",
+      "prompt": "Create a PCB for a USB-powered light dial with eight red LEDs and a rotary brightness control.",
+      "sourceBoard": "https://www.easygerber.com/boards/58bae578-c2f6-494d-9afc-3320694592c2",
+      "revision": 1,
+      "url": "https://www.easygerber.com/integrations/claude/orbit-led-dial-2d.png"
+    },
+    {
+      "image": "easygerber-drift-usb-gamepad.png",
+      "prompt": "Create a PCB for a USB gamepad with two thumbsticks, buttons, and a small display.",
+      "sourceBoard": "https://www.easygerber.com/boards/096b5c25-4117-450f-bd13-5e6146f3b048",
+      "revision": 2,
+      "url": "https://www.easygerber.com/integrations/claude/drift-usb-gamepad-2d.png"
+    }
+  ]
+}
