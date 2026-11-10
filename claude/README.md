@@ -1,6 +1,6 @@
 # EasyGerber for Claude
 
-![EasyGerber](assets/logo.svg)
+![EasyGerber](assets/icon.png)
 
 AI PCB design, layout, and routing.
 
