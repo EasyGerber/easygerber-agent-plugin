@@ -141,6 +141,20 @@ On October 20, 2026, Devin CLI 3000.11.92 installed the generated local package 
 
 Devin documents `devin mcp login easygerber` for plugin OAuth connections. Account access, guest-to-account continuation, and board workflows need separate native validation; installing a plugin or listing tools does not establish those results. Marketplace submission and listing are separate from the shared package's release checks. See the official [Devin plugin guide](https://docs.devin.ai/cli/extensibility/plugins/overview).
 
+## Factory Droid
+
+Add EasyGerber's vendor marketplace and install the plugin in Droid:
+
+```sh
+droid plugin marketplace add EasyGerber/easygerber-agent-plugin
+droid plugin marketplace list
+droid plugin install easygerber@easygerber-agent-plugin --scope user
+```
+
+Read back the registered marketplace name with `marketplace list`; pinned sources can have a different name. This vendor catalog references the existing `claude/` package. Droid supports that layout and translates its metadata and MCP configuration while caching it. No local EasyGerber engine or npm installer is needed.
+
+Use a configured Droid model and keep normal tool approvals enabled. Initial catalog access and a new board use `https://www.easygerber.com/api/mcp` without an EasyGerber account. Saved-account work requires separate EasyGerber consent and the permissions described below. Installing the plugin does not verify its account authorization or complete board workflow. Vendor-marketplace availability is separate from inclusion in Factory's own catalog. See the [official Factory plugin documentation](https://docs.factory.com/harness/plugins).
+
 ## Codex in VS Code or the terminal
 
 Requires Node.js 22 or newer and Codex. These npm commands require version 0.3.8 to be published to npm; check `npm view @easygerber/agent-plugin version` first. If npm is behind the source release, use the [source installation instructions](#update-and-remove) below.

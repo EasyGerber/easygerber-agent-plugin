@@ -1,0 +1,16 @@
+{
+  "name": "easygerber-agent-plugin",
+  "description": "EasyGerber integrations for AI PCB design, layout, and routing",
+  "owner": {
+    "name": "EasyGerber",
+    "email": "hello@easygerber.com"
+  },
+  "plugins": [
+    {
+      "name": "easygerber",
+      "description": "AI PCB design, layout, and routing",
+      "source": "./claude",
+      "homepage": "https://easygerber.com/agents"
+    }
+  ]
+}

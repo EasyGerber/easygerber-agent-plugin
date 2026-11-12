@@ -17,28 +17,28 @@ code --install-extension easygerber.easygerber
 You can also install a reviewed release VSIX with **Extensions: Install from VSIX...** or:
 
 ```sh
-code --install-extension easygerber-vscode-extension-0.3.6.vsix
+code --install-extension easygerber-vscode-extension-0.3.8.vsix
 ```
 
 Open a new Chat session in Agent mode. Use `/easygerber` to load the PCB workflow, and keep normal tool approvals enabled. **MCP: List Servers** shows the extension's EasyGerber connection.
 
 Use one EasyGerber connection at a time. If you already added EasyGerber through an MCP registry or a manual MCP configuration, disable that duplicate connection while using this extension. Installing this extension does not migrate or remove your existing settings.
 
-## Start with a guest board
+## Start a board
 
-No EasyGerber account or API key is needed to start as a guest. For a small first design, ask:
+No EasyGerber account or API key is needed to start a board. For a small first design, ask:
 
 > Use EasyGerber to make a passive signal-and-ground pass-through board with two published two-pin connectors. Confirm their catalog pins, use the app's supported defaults, generate the layout, show the preview, check for blocking issues, and export the manufacturing ZIP and editable EasyGerber file. Do not place an order.
 
-The workflow uses real catalog parts, their footprints, and available 3D models. For manufacturing export, the agent should wait for layout generation to finish and check the current saved revision. A saved schematic alone is not a finished PCB. An editable EasyGerber backup can be exported directly from the saved project, even with missing, incomplete, or stale layout; it does not require generation or a layout check.
+The workflow browses published parts, then creates the board and any needed private access together. The agent keeps one private board reference for later turns. It uses real catalog parts, their footprints, and available 3D models. For manufacturing export, the agent should wait for layout generation to finish and check the current saved revision. A saved schematic alone is not a finished PCB. An editable EasyGerber backup can be exported directly from the saved project, even with missing, incomplete, or stale layout; it does not require generation or a layout check.
 
-A guest session supports one board and has no scheduled expiration. Its token, viewer link, and export links are private capabilities. New manufacturing and EasyGerber exports require current board access. Issued download links have no automatic expiry and retain the exact exported snapshot after board edits or deletion, guest claim, and guest cleanup. Only explicit download-link revocation or deletion of the exported file ends access. The download page refreshes storage authorization automatically. Anyone with a complete download link can download its file; keep these links out of public issues and recordings.
+The board has no scheduled expiration. Its reference, viewer link, and export links are private. The agent keeps the same reference and exact original request when recovering a lost first response. New manufacturing and EasyGerber exports require current board access. Issued download links have no automatic expiry and retain the exact exported snapshot after board edits or deletion, guest claim, and guest cleanup. Only explicit download-link revocation or deletion of the exported file ends access. The download page refreshes storage authorization automatically. Anyone with a complete download link can download its file; keep these links out of public issues and recordings.
 
 ## Continue with your EasyGerber account
 
-Ask the agent to connect your existing EasyGerber account when you want to keep or continue working on a guest board. Complete the native OAuth consent flow, then resume the same task so the agent can finish saving the guest board to your account. GitHub/Copilot sign-in supplies model access and is separate from EasyGerber authorization.
+Ask the agent to connect your existing EasyGerber account when you want to keep or continue working on the board. Complete normal OAuth consent and resume the same task; `get_board` with the same reference saves it into your account. GitHub/Copilot sign-in supplies model access and is separate from EasyGerber authorization.
 
-The extension does not require account authorization during guest setup, embed credentials, or request extra OAuth permissions. Account tools use the hosted service's normal authorization. If authorization pauses the operation, return to Chat and ask the agent to resume the pending guest-board claim.
+The extension does not require account authorization during guest setup, embed credentials, or request extra OAuth permissions. Account tools use the hosted service's normal authorization. If authorization pauses the operation, return to Chat and ask the agent to continue with the same board reference.
 
 ## Privacy, support, and scope
 
