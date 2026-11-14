@@ -52,7 +52,7 @@ export async function runCli(args, options = {}) {
     if (command === 'setup' && !dryRun) {
       output('Restart the Codex chat/IDE to load the skill, then ask EasyGerber to create a board, show its preview, and export the files.')
       output('Create and continue a board with one private reference. To connect an account, use Codex MCP settings or run: codex mcp login easygerber')
-      output('After sign-in, continue the same board; its reference stays the same while the service saves it to your account.')
+      output('After sign-in, ask the agent to save the board to your account; its reference stays the same.')
       output('Do not install the native plugin alongside this standalone skill and connection.')
     }
     if (command === 'uninstall' && !dryRun) output('Local files were removed where unchanged. Disconnect/revoke EasyGerber authorization separately in Codex or your EasyGerber account.')

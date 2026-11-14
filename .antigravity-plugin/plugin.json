@@ -2,7 +2,7 @@
   "name": "easygerber",
   "displayName": "EasyGerber",
   "description": "AI PCB design, layout, and routing",
-  "version": "0.3.8",
+  "version": "0.3.10",
   "logo": "assets/logo.svg",
   "author": {
     "name": "EasyGerber",

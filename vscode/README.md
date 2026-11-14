@@ -36,7 +36,7 @@ The board has no scheduled expiration. Its reference, viewer link, and export li
 
 ## Continue with your EasyGerber account
 
-Ask the agent to connect your existing EasyGerber account when you want to keep or continue working on the board. Complete normal OAuth consent and resume the same task; `get_board` with the same reference saves it into your account. GitHub/Copilot sign-in supplies model access and is separate from EasyGerber authorization.
+Ask the agent to connect your existing EasyGerber account when you want to keep or continue working on the board. Complete normal OAuth consent and resume the same task; `save_board_to_account` with the same reference saves it into your account. GitHub/Copilot sign-in supplies model access and is separate from EasyGerber authorization.
 
 The extension does not require account authorization during guest setup, embed credentials, or request extra OAuth permissions. Account tools use the hosted service's normal authorization. If authorization pauses the operation, return to Chat and ask the agent to continue with the same board reference.
 

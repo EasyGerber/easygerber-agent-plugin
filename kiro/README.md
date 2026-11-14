@@ -27,7 +27,7 @@ For an installation check without creating or changing anything, use:
 
 The power uses Streamable HTTP at `https://www.easygerber.com/api/mcp`. A fresh connection can initialize and discover tools without an EasyGerber account, OAuth grant, or API key. Discovery does not create a guest session or perform board work.
 
-For user-requested board work, the hosted service supports one guest board per session before signup. Follow the [workflow included in the skill](skills/easygerber/SKILL.md#board-workflow), select published catalog components with their actual pins, footprints, and available 3D models, and use app-supported settings. Keep guest tokens and private viewer links private. The skill covers saved revisions, asynchronous layout, previews, blocker checks, manufacturing exports, and saving a guest board to an account after consent.
+For user-requested board work, the hosted service supports one guest board per session before signup. Follow the [workflow included in the skill](skills/easygerber/SKILL.md#board-workflow), select published catalog components with their actual pins, footprints, and available 3D models, and use app-supported settings. Keep the board reference and private viewer links private. The skill covers saved revisions, asynchronous layout, previews, blocker checks, manufacturing exports, and saving a guest board to an account after consent.
 
 Saved account boards require EasyGerber OAuth consent. For Kiro CLI 2.32.0 V3, use the optional account connection below. The power's automatic account authorization during an active guest task did not complete in the tested session: two callbacks returned `InvalidRequest` with the message "authorization request expired or already completed." The native listener was still active; the cause of that authorization-state error was not established. Authenticating the public endpoint from `/mcp` only reset its guest connection because that endpoint permits unauthenticated discovery. The separately configured account entry completed authorization and successfully saved the existing guest board to the account.
 
@@ -35,7 +35,7 @@ Saved account boards require EasyGerber OAuth consent. For Kiro CLI 2.32.0 V3, u
 
 Use `https://www.easygerber.com/api/mcp/account` for account work. This is a separate OAuth resource; preserve the power's guest connection and do not copy credentials between them. No fixed client ID, secret, or manual scope override is needed for the tested account-first flow.
 
-1. Finish any running guest layout and keep the current conversation, which holds the original guest capability. Do not start a replacement guest session or paste its token into chat or a settings file.
+1. Finish any running layout and keep the current conversation, which holds the private board reference. Do not create a replacement board or paste its reference into chat or a settings file.
 2. In the workspace's `.kiro/settings/mcp.json`, merge the following named entry into the existing `mcpServers` object, preserving all other servers and settings. If this account endpoint is already configured, inspect and use that connection instead of duplicating it. Keep tool approval enabled.
 
 ```json
@@ -51,13 +51,13 @@ Use `https://www.easygerber.com/api/mcp/account` for account work. This is a sep
 
 3. Restart Kiro in the same workspace and resume the guest-board conversation. `kiro-cli --v3 chat --resume` resumes the most recent conversation in that directory. If it is not the intended conversation, use `kiro-cli --v3 chat --list-sessions` and `kiro-cli --v3 chat --resume-id <session-id>` to resume the correct one. The validation used the explicit session ID. A restart was needed before the added connection appeared in the tested session.
 4. Use `/mcp` to inspect the account connection and start its normal authentication flow if required. Complete EasyGerber sign-in and consent; an existing valid authorization for this account endpoint may be reused by Kiro. Verify the account server is running and advertises the EasyGerber tools. The guest power and account connection may both be listed.
-5. Ask Kiro to save the guest board through the account connection, using the original guest token already retained in the resumed conversation. It must call `claim_guest_board` on the account connection and then read the returned account board ID without a guest token. A successful claim ends access through the old guest capability. Do not create another board or treat signing in alone as confirmation of the save.
+5. Ask Kiro to continue the same board through the account connection, using the original `boardRef` retained in the resumed conversation. `save_board_to_account` saves it into the account with authorized write access; read the returned state to confirm the save. The reference remains stable, while signed-out access ends. Do not create another board or treat sign-in alone as confirmation of the save. For an older token-only task, follow the skill's explicit legacy-claim compatibility instructions.
 
 For example:
 
-> Save the guest board from this conversation to my personal EasyGerber account using the easygerber-account connection. Use the original guest capability for the claim, then read the returned account board without guest credentials to confirm the saved design. Do not create a replacement board.
+> Continue this conversation's board in my personal EasyGerber account using the easygerber-account connection, then read the saved design to confirm it. Keep the same board reference and do not create a replacement board.
 
-If the original capability is no longer available in the conversation, stop and explain that limitation rather than starting another guest session. For later account-board work, use the account connection and omit guest credentials from ordinary tools.
+If the original reference is no longer available in the conversation, explain that limitation rather than creating another board. For later account-board work, keep the account connection and use the board reference returned by the service.
 
 Complete the browser consent while Kiro is still waiting. In an earlier test of the account endpoint, the local callback listener expired after about 60 seconds and the browser reported a refused connection; renewing that account authorization flow succeeded. This was separate from the power's mid-session `InvalidRequest` error while its listener was active. A return to `localhost` is the native Kiro app on the same computer, distinct from EasyGerber's hosted service. If the browser reports a refused local connection after a delay, restart Kiro's normal authentication flow and complete it while the new listener is active. Keep the actual callback destination inspectable; do not send codes or tokens in chat.
 
