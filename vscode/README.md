@@ -17,7 +17,7 @@ code --install-extension easygerber.easygerber
 You can also install a reviewed release VSIX with **Extensions: Install from VSIX...** or:
 
 ```sh
-code --install-extension easygerber-vscode-extension-0.3.8.vsix
+code --install-extension easygerber-vscode-extension-0.3.10.vsix
 ```
 
 Open a new Chat session in Agent mode. Use `/easygerber` to load the PCB workflow, and keep normal tool approvals enabled. **MCP: List Servers** shows the extension's EasyGerber connection.
