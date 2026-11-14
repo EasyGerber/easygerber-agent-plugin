@@ -157,12 +157,12 @@ Use a configured Droid model and keep normal tool approvals enabled. Initial cat
 
 ## Codex in VS Code or the terminal
 
-Requires Node.js 22 or newer and Codex. These npm commands require version 0.3.8 to be published to npm; check `npm view @easygerber/agent-plugin version` first. If npm is behind the source release, use the [source installation instructions](#update-and-remove) below.
+Requires Node.js 22 or newer and Codex. These npm commands require version 0.3.10 to be published to npm; check `npm view @easygerber/agent-plugin version` first. If npm is behind the source release, use the [source installation instructions](#update-and-remove) below.
 
 ```sh
-npx @easygerber/agent-plugin@0.3.8 setup --dry-run
-npx @easygerber/agent-plugin@0.3.8 setup
-npx @easygerber/agent-plugin@0.3.8 doctor
+npx @easygerber/agent-plugin@0.3.10 setup --dry-run
+npx @easygerber/agent-plugin@0.3.10 setup
+npx @easygerber/agent-plugin@0.3.10 doctor
 ```
 
 Setup installs `~/.agents/skills/easygerber` and adds a small managed MCP table to `$CODEX_HOME/config.toml` (default `~/.codex/config.toml`). It preserves existing TOML text and other servers. An ownership receipt lives in `~/.easygerber/agent-plugin/codex-install.json`. No project files or firmware are changed. Codex is the default and only installer target; optional `--client codex` makes that choice explicit. All commands support unattended use, and `--yes` is accepted for scripts.
@@ -247,7 +247,7 @@ Use `/mcp` in Claude Code to inspect the EasyGerber connection and authorize acc
 
 ## Update and remove
 
-Run `npx @easygerber/agent-plugin@0.3.8 setup`, then restart the Codex chat/IDE to load the board-reference workflow and current permission instructions. Upgrading from 0.2.x also replaces the retired `score_board` name with `check_board_layout`; no compatibility alias is provided.
+Run `npx @easygerber/agent-plugin@0.3.10 setup`, then restart the Codex chat/IDE to load the board-reference workflow and current permission instructions. Upgrading from 0.2.x also replaces the retired `score_board` name with `check_board_layout`; no compatibility alias is provided.
 
 The public source repository, npm, and client directories have separate publication steps. Check `npm view @easygerber/agent-plugin version` before requesting a specific npm version. If the source release is newer than npm, the npm command cannot install that release yet. From a checkout of the matching public release tag, run `npm install --ignore-scripts --no-package-lock`, then `node bin/easygerber.mjs setup` to use the same installer from that source. Restart the Codex chat/IDE afterward.
 
@@ -256,8 +256,8 @@ A server deployment updates instructions and tools returned by the next MCP init
 Run `setup` from the new package version to update unchanged managed files. Repeating the same setup is a no-op. A conflicting MCP entry or modified skill file causes setup to stop without replacing it. Keep the file, or move it aside yourself before retrying. Symlinked managed destinations are refused to avoid changing unexpected locations.
 
 ```sh
-npx @easygerber/agent-plugin@0.3.8 uninstall --dry-run
-npx @easygerber/agent-plugin@0.3.8 uninstall
+npx @easygerber/agent-plugin@0.3.10 uninstall --dry-run
+npx @easygerber/agent-plugin@0.3.10 uninstall
 ```
 
 Uninstall removes only unchanged files and the unchanged managed connection, preserving unrelated settings and modified files. It reports preserved paths and retains their ownership receipt. Revoke the account connection separately in Codex or EasyGerber; deleting local files does not revoke OAuth grants or invalidate an existing guest viewer link. Guest access ends after claim or revocation, not on an automatic timer. Cleanup can remove the retired guest copy; the claimed account copy and previously issued export links remain available. Interrupted setup can resume from its receipt. If a stale installer lock remains, verify no installer process is running before removing the lock path reported by the CLI.
@@ -272,11 +272,11 @@ See [integration documentation and support](https://easygerber.com/agents), [pri
 
 The public repository's default branch is `main`. The [square Grok marketplace logo](https://raw.githubusercontent.com/EasyGerber/easygerber-agent-plugin/main/assets/grok-marketplace.svg) is exported only to the repository, outside the npm and plugin packages. The archival `codex/grok-submission-assets` tag preserves the original artwork URL.
 
-The repository's `server.json` declares release `0.1.1` of the [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/latest), using the general `https://www.easygerber.com/api/mcp` URL for guest discovery and optional account authorization. Directories that import Registry metadata should use that URL for guest-first access. Account-only client configurations remain available separately as described above. The manifest is exported only to the public repository; the npm and plugin packages contain no local MCP server or private engines. Registry version `0.1.1` tracks hosted-service metadata independently of npm and plugin version `0.3.8`.
+The repository's `server.json` declares release `0.1.1` of the [MCP Registry entry `io.github.EasyGerber/easygerber`](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.EasyGerber%2Feasygerber/versions/latest), using the general `https://www.easygerber.com/api/mcp` URL for guest discovery and optional account authorization. Directories that import Registry metadata should use that URL for guest-first access. Account-only client configurations remain available separately as described above. The manifest is exported only to the public repository; the npm and plugin packages contain no local MCP server or private engines. Registry version `0.1.1` tracks hosted-service metadata independently of npm and plugin version `0.3.10`.
 
 The product's normal save and release scripts do not publish npm, the public integration repository, or MCP Registry. The private checkout's `npm run release:agent-plugin -- --output <directory>` prepares sanitized artifacts; `npm run check:agent-release -- --release-dir <directory>` verifies them. Publish only the generated `public-source` files to the existing public repository, preserving reviewed client configurations. Validate `public-source/server.json` with `mcp-publisher validate`, then publish it with `mcp-publisher publish` under the existing Registry identity and verify the latest metadata. Registry versions are immutable, so Registry metadata changes require a new Registry version independently of npm package releases.
 
-For npm version 0.3.8, run `npm pack --ignore-scripts --pack-destination ..` from `<directory>/public-source`. From the private checkout, verify the resulting archive with `npm run check:agent-release -- --release-dir <directory> --npm-tarball <directory>/easygerber-agent-plugin-0.3.8.tgz`. Publish that exact verified archive with `npm publish <directory>/easygerber-agent-plugin-0.3.8.tgz --access public`.
+For npm version 0.3.10, run `npm pack --ignore-scripts --pack-destination ..` from `<directory>/public-source`. From the private checkout, verify the resulting archive with `npm run check:agent-release -- --release-dir <directory> --npm-tarball <directory>/easygerber-agent-plugin-0.3.10.tgz`. Publish that exact verified archive with `npm publish <directory>/easygerber-agent-plugin-0.3.10.tgz --access public`.
 
 The package contains the installer runtime, connection metadata, skills, and assets. The public repository also contains a GitHub Actions workflow and an installer smoke test. On pushes and pull requests, the workflow checks the packed installer on Linux, Windows, and macOS with Node.js 22 and 24. It tests temporary user profiles without connecting to EasyGerber or using account credentials. These checks cover installation behavior; they do not certify authentication or board operations in a particular agent client. See the [Actions results](https://github.com/EasyGerber/easygerber-agent-plugin/actions) for actual run status.
 
@@ -290,7 +290,7 @@ Antigravity uses the generated `.antigravity-plugin/plugin.json` and root `mcp_c
 
 Kiro uses the generated eight-file `kiro` folder with standard Agent Plugins manifests and the guest-capable endpoint. Its skill includes the complete canonical workflow inline because relative workflow references did not resolve in the tested native session. The standalone reference remains unchanged. The Kiro folder is repository-only and adds no files to the npm package or OpenAI/Claude ZIPs; submit its public folder URL for Kiro review.
 
-Gemini CLI uses the generated root `gemini-extension.json` and the same root skill. Its Streamable HTTP configuration uses `httpUrl` and leaves authorization optional for guest access. The release also generates `easygerber-gemini-extension-0.3.8.zip`, containing the manifest, shared skill and workflow reference, artwork, README, and license. The manifest and Gemini archive are outside the npm and other clients' packages. Publish that verified archive as the sole installable asset of the matching GitHub release; Gemini prefers the latest release when installing from the repository URL. Preserve historical releases, including the review video, and keep a valid extension archive on the latest release. No npm publication is needed for Gemini distribution.
+Gemini CLI uses the generated root `gemini-extension.json` and the same root skill. Its Streamable HTTP configuration uses `httpUrl` and leaves authorization optional for guest access. The release also generates `easygerber-gemini-extension-0.3.10.zip`, containing the manifest, shared skill and workflow reference, artwork, README, and license. The manifest and Gemini archive are outside the npm and other clients' packages. Publish that verified archive as the sole installable asset of the matching GitHub release; Gemini prefers the latest release when installing from the repository URL. Preserve historical releases, including the review video, and keep a valid extension archive on the latest release. No npm publication is needed for Gemini distribution.
 
 Devin uses the generated root `.devin-plugin/plugin.json`, with the shared root skill and `assets/logo.svg`. Its inline MCP configuration selects the general guest-capable endpoint; native Devin manifests do not automatically read the portable root `mcp.json`. This repository-only metadata adds no files to the npm package or other clients' archives. Marketplace entries reference the existing public repository at a reviewed full commit SHA. Before submitting one, follow the marketplace's native installation and real tool-call requirement. Preserve the published Gemini release and its asset when publishing repository-only metadata.
 
