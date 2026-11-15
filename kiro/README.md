@@ -2,7 +2,7 @@
 
 AI PCB design, layout, and routing
 
-This power connects Kiro to EasyGerber's production service and includes the EasyGerber board workflow. Describe a circuit or start from firmware pin assignments, select published components, revise schematics, generate layouts, and request manufacturing exports. The package contains instructions, connection metadata, and artwork. PCB placement, routing, and scoring run exclusively on EasyGerber's servers.
+This power connects Kiro to EasyGerber's production service and includes the EasyGerber board workflow. Describe a circuit or start from firmware pin assignments, select published components, revise schematics, generate layouts, and request manufacturing exports. The package contains instructions, connection metadata, and artwork. PCB layout, routing, and scoring run exclusively on EasyGerber's servers.
 
 ## Install
 

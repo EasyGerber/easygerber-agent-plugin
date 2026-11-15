@@ -17,7 +17,7 @@ code --install-extension easygerber.easygerber
 You can also install a reviewed release VSIX with **Extensions: Install from VSIX...** or:
 
 ```sh
-code --install-extension easygerber-vscode-extension-0.3.10.vsix
+code --install-extension easygerber-vscode-extension-0.3.11.vsix
 ```
 
 Open a new Chat session in Agent mode. Use `/easygerber` to load the PCB workflow, and keep normal tool approvals enabled. **MCP: List Servers** shows the extension's EasyGerber connection.
@@ -42,7 +42,7 @@ The extension does not require account authorization during guest setup, embed c
 
 ## Privacy, support, and scope
 
-The extension registers a hosted MCP connection and provides workflow instructions. PCB placement, routing, and scoring run on EasyGerber's servers. Your selected model provider handles Chat prompts; authorized tool requests and board data go to EasyGerber. The extension adds no separate analytics or credential store.
+The extension registers a hosted MCP connection and provides workflow instructions. PCB layout, routing, and scoring run on EasyGerber's servers. Your selected model provider handles Chat prompts; authorized tool requests and board data go to EasyGerber. The extension adds no separate analytics or credential store.
 
 Review the [privacy policy](https://easygerber.com/privacy) and [terms](https://easygerber.com/terms). See [EasyGerber integration documentation and support](https://easygerber.com/agents), or report connection problems through [GitHub Issues](https://github.com/EasyGerber/easygerber-agent-plugin/issues) without including private board links, tokens, or exports. Company contact: `hello@easygerber.com`.
 

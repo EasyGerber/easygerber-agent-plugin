@@ -8,7 +8,7 @@ Design circuit boards with AI, from your first idea to the files your manufactur
 
 Choose from over one million electronic components in EasyGerber’s catalog, including LEDs, sensors, connectors, and microcontrollers. Build with real catalog parts, their footprints, and available 3D models—from a simple LED circuit to a custom electronics project.
 
-Create and edit schematics, generate PCB layouts with automatic component placement and routing, and refine your design through conversation. Adjust board settings, explore copper layers, inspect your board in interactive 3D, and check for blocking layout issues before manufacturing export.
+Create and edit schematics, generate PCB layouts with AI component placement and automatic routing, and refine your design through conversation. Adjust board settings, explore copper layers, inspect your board in interactive 3D, and check for blocking layout issues before manufacturing export.
 
 Download Gerber files, drill files, a bill of materials (BOM), component placement files, and an editable EasyGerber file to continue working on your design. Save an editable backup even before the layout is complete or up to date, without generating or checking a layout just to export it.
 
