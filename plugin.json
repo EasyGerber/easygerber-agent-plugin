@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "easygerber",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "AI PCB design, layout, and routing",
   "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
   "homepage": "https://easygerber.com/agents",
@@ -78,7 +78,7 @@
         }
       },
       "publication": {
-        "release_notes": "The agent can place a reference label beside a part by choosing a side and can use placement feedback to correct crowded labels. Guest board and export results now offer an optional Save to My Boards link. The agent confirms a requested account save with the saved board link."
+        "release_notes": "Guest and signed-in boards can save with a crowded reference label. The agent reads the placement issue, preserves user-specified positions, and can correct the label on the same board."
       }
     }
   }

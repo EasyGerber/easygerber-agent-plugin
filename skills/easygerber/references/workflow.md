@@ -10,25 +10,46 @@ The server tool schema is authoritative for field names, allowed settings, requi
 4. Generate one private `boardRef` as `egbr1_` followed by 32 cryptographically random bytes encoded as unpadded base64url (43 characters after the prefix). Submit `create_board` with that reference, `name`, a fresh UUID `requestId`, and the thin intent below. Keep the reference and complete original request in private tool context across turns. Include `boardEdits` with the board size and a position for every part and reference designator, as described under Place the board. Beyond that, include only requested settings/customizations supported by the app. The service supplies component footprints, models, and hidden routing/manufacturing constraints, including for test coupons.
 5. Continue with the returned `boardRef`, `revision`, and private `url`. Pass the same reference to reads, edits, status polls, checks, previews, and exports. Creation also lays out the board: the call waits for the layout and its check and returns the finished board. If the result has `pollAfterSeconds` instead, the layout is still running; follow its `generation` with `get_generation` instead of calling `generate_layout`. A saved schematic and a completed layout are still different outcomes: report the layout only when `layout.current` is true.
 
-### Map returned parts into the thin intent
+### Create a board from published parts
 
 Parts are string arrays `[id, dbId, value]`, with an optional fourth `designator` when the printed label differs from `id`. The first `id` is your instance identity within this board; `dbId` is the selected returned part's catalog `id`, from `search_parts` or `get_part`. The required third item is its value/display label. Connections contain `net`, `class` (`power`, `signal`, or `ground`), and `pins`. Each connected pin is exactly `[partId, padId]`: use the instance ID and the chosen returned `pins[].number`, both strings. Do not use a pin's display name or array index as its pad ID. Firmware pin labels describe signals; map them to the verified catalog pins.
 
-For example, `inputConnector` and `outputConnector` below are selected part objects from actual tool results (`data` entries for search, or `data` for a part lookup). `inputPin` and `outputPin` are entries from each part's returned `pins` array, selected for the required signal after checking compatibility. No catalog IDs or pin numbers are invented:
+This two-resistor coupon uses the published Yageo RC0603FR-0710KL, a 10 kΩ 0603 resistor. Call `get_part` with `{ "id": "69bdbb02b86ba86cb74b6b68" }`. Bind its returned `data` to `resistor` and verify the MPN and pins `"1"` and `"2"`. Send these arguments to `create_board` with the private `boardRef` and fresh UUID `requestId` generated in step 4. Guest and signed-in calls use the same arguments.
 
 ```js
-const intent = {
-  parts: [
-    ["J1", inputConnector.id, "Input"],
-    ["J2", outputConnector.id, "Output"],
-  ],
-  connections: [
-    { net: "SIGNAL", class: "signal", pins: [["J1", inputPin.number], ["J2", outputPin.number]] },
-  ],
-};
+const createArgs = {
+  boardRef,
+  requestId,
+  name: "Two-resistor coupon",
+  intent: {
+    parts: [["first", resistor.id, "10k", "R1"], ["second", resistor.id, "10k", "R2"]],
+    connections: [
+      { net: "IN", class: "signal", pins: [["first", "1"], ["second", "1"]] },
+      { net: "OUT", class: "signal", pins: [["first", "2"], ["second", "2"]] },
+    ],
+  },
+  boardEdits: {
+    settings: { width: 26, height: 22 },
+    fixedPlacements: { upsert: [
+      { partId: "first", x: 12, y: 7, rotationDeg: 0, side: "top", designator: "above" },
+      { partId: "second", x: 12, y: 15, rotationDeg: 0, side: "top", designator: "right" },
+    ] },
+  },
+}
 ```
 
-Use this compact shape even if the host renders nested tool fields as `unknown`; the live schema remains authoritative.
+For an exact position, omit `designator` on the corresponding placement and include a `silkscreenTexts.upsert` item. For example, `{ id: "refdes_second", x: 12, y: 15 }` puts R2's text on the centre of its footprint. A successful save preserves those coordinates and returns a `designator_placement` issue in `data.placementIssues`. If the position must remain exact, show the user the saved board and explain the overlap. If you chose the position and the issue lists `below` as a free side, the following `update_board` arguments move only R2's label. Here `saved` is the returned board data for the current revision and `nextRequestId` is a fresh UUID.
+
+```js
+const updateArgs = {
+  boardRef: saved.boardRef,
+  expectedRevision: saved.revision,
+  requestId: nextRequestId,
+  boardEdits: { fixedPlacements: { upsert: [{ partId: "second", designator: "below" }] } },
+}
+```
+
+Read the result's `placementIssues`. A clean board omits the field. If a layout completed in the meantime, get the latest revision from `get_board` before applying the correction.
 
 ## Place the board
 
@@ -46,7 +67,11 @@ Place from measured geometry, not estimates. Catalog results that carry pins als
 - A designator counts as 0.8 mm per character wide and 1 mm tall. Keep it at least 0.2 mm outside every part's extent, 0.3 mm inside the outline and 0.2 mm from other labels, within 3 mm of its own part and at least 0.3 mm nearer to it than to any other part. Each distance is measured from the box the text covers to a part's extent, not between centres.
 - Size the board to the arrangement.
 
-If validation reports `designator_required`, add a label position for each named part. For `designator_placement`, use a free side named in the issue when it suits the design. When switching to a named side, drop the old `refdes_<partId>` coordinate entry from the outgoing patch. When two labels compete for the same space, choose separate positions. If no space remains beside a part, make room by moving the part or the obstacle identified in the issue, within the user's placement constraints. Resubmit the corrected inputs with the same `boardRef` and a fresh `requestId`. On an existing board, preserve unrelated placements and remove a part's fixed placement only together with the part.
+A rejected create with `designator_required` needs a position for each named label. Correct the original arguments and resend with the same `boardRef` and a fresh `requestId`.
+
+A successful create or edit can return `placementIssues` identifying the affected `partId` and `labelId`. To improve a saved `designator_placement`, choose a value from `suggestedSides` or use the exact centre from `suggestedPosition` when provided. On a switch to a named side, omit the old label coordinates from the outgoing edit. Choose separate positions for competing labels. If no position fits, report the part or obstacle that needs more room before changing any user-specified placement. Preserve unrelated placements.
+
+When more than 12 labels have issues, `placementIssueCount` gives the total and `placementIssues` shows the first 12. Apply the intended corrections from that batch together in one `update_board`, then read the new revision for the remaining labels. Keep any exact positions the user asked to retain.
 
 ## Clearances, keepouts, and pin currents
 
@@ -75,6 +100,8 @@ Call `generate_layout` only to retry: after a failed or cancelled job, or when a
 When reviewing a layout or preparing a manufacturing ZIP, use the `validation` a save or `get_board` returned for the current revision, and call `check_board_layout` when it is null. `validation` reports `hasBlockingIssues` and actionable `blockingIssues`; report those issues or say that no blocking issues were found. Numeric scores and deductions are not exposed. A null `validation` means the board has no current assessment, not that it passed; generate a fresh layout if needed and run the check. An unavailable check is not a pass or permission to substitute another tool.
 
 Use `export_board` with the latest saved revision, as the last save or `get_board` returned it. For an editable backup (`format: "egb"`), export the valid saved project directly, including projects with missing, incomplete, or stale layouts. Do not generate a layout or run `check_board_layout` solely for an EGB export; exporting a backup does not establish manufacturing readiness. Manufacturing ZIPs require current PCB geometry and electrical requirements: generate or refresh the layout if needed, then use the saved revision and make sure the layout is checked before exporting.
+
+A successful manufacturing export can carry `placementIssues`. Give the user the requested download and identify any affected reference labels. Keep any exact positions the user requested.
 
 New exports require current board access and remain subject to document validation and size limits. Return each requested artifact link, or download the file to the user's requested destination. At the first guest board handoff and alongside its export, present the returned `saveToAccount.label` linked to `saveToAccount.url` so the user can find the design later from My Boards. A single link is enough when the preview and save offer share the same URL. Keep the download link separate. On older servers, use the original private viewer link when available. Stable private download links have no automatic expiry and return the exact exported snapshot, including after board edits or deletion, guest claim, and guest cleanup. Preserve returned links exactly, including their capability fragment. The download page refreshes temporary storage authorization automatically. Only explicit download-link revocation or deletion of the exported file ends access. An unavailable download is not permission to bypass revocation or silently export a different revision. Do not infer that exporting orders a physical board.
 
