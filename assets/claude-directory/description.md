@@ -6,4 +6,4 @@ Create and edit schematics, generate PCB layouts with AI component placement and
 
 Download Gerber files, drill files, a bill of materials (BOM), and component placement files. Save an editable EasyGerber (.egb) backup at any stage, including empty, incomplete, or changed projects, without generating a PCB layout. Manufacturing exports still require a current layout that passes the required checks.
 
-Start with one guest board without signing up. When you connect your account, ask to keep your guest design and it is saved there.
+Create, edit, and export one private board as a guest. To find it again from your account, open Save to My Boards beside the board or its downloads and complete the save in the private preview. You can also ask your connected agent to save it for you.
