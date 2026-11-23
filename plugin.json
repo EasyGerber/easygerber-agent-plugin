@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "easygerber",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "AI PCB design, layout, and routing",
   "author": { "name": "EasyGerber", "url": "https://easygerber.com" },
   "homepage": "https://easygerber.com/agents",
@@ -78,7 +78,7 @@
         }
       },
       "publication": {
-        "release_notes": "The agent can undo a board edit. Every edit keeps the board as it was, and on request the agent returns the board to an earlier revision with the layout it had. An undo can itself be undone. This works for guest and signed-in boards."
+        "release_notes": "The guidance for automatic layers now matches the service. A board that leaves its layer count to the layout can come back with one, two or four copper layers, and the agent reads the saved count. Earlier guidance said one or two. This works for guest and signed-in boards."
       }
     }
   }
