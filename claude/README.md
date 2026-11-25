@@ -1,6 +1,6 @@
 # EasyGerber for Claude
 
-AI PCB design, layout, and routing. Describe a board in everyday language, or start from the pin assignments in your firmware. Choose published parts, edit the schematic, lay out and check the board, and download Gerber, drill, BOM, placement, and EasyGerber files. A first board needs no account.
+Describe a circuit or share your firmware pinout. Claude places catalog parts. EGT-2 Vela routes the copper. Ask to reroute an eligible EGT-1 board with its saved placements and check for disconnected pins. Download Gerber, drill, BOM, placement or editable board files. Guest boards need no account.
 
 Try: “Create a small 3.3 V LED board, show a preview, and export manufacturing files.”
 
